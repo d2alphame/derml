@@ -58,4 +58,11 @@ If the value is a multi-line value, use colon-equals (`:=`) and follow with a de
 			This is line 3
 		end-value
 ```
+Do not forget the whitespace around `:=`.
+
+### Keys
+The keys can be any combination of uppercase letters (A-Z), lowercase letters (a-z), numbers (0-9), dash, and underscore. So in regex that would be
+```
+	/[a-zA-Z0-9_-]+/
+```
 
