@@ -26,6 +26,7 @@ In the above example, the value begins from the letter 'M' up to the last charac
 Keys are case-sensitive so `mykey` is different from `myKey`, which is different from `MYKEY`, which is different from `MyKey`,
 you get the picture.
 
+#### Long values
 Sometimes values are too long to fit on a single line, for example:
 ```
 	long-value = This is a value that is really, really long and which we would like to break down into multiple lines because who wants to read this?
@@ -46,5 +47,15 @@ Use pipe-equals (|=) instead of just equals (=) sign and end the value with a bl
 					
 	another_key = another value
 ```
-Note the blank line between the long value and the next key.
+Note the blank line between the long value and the next key. Also note the whitespace before `|=` as it is a must.
+
+#### Multi-line values
+If the value is a multi-line value, use colon-equals (`:=`) and follow with a delimiter. The delimiter starts from the first non-whitespace character after `:=` up to the end of the line. The delimiter on a line by itself (and possibly surrounded by whitespace) marks the end of the of the multi-line value.
+```
+	multi-line-value := end-value
+			This is line 1
+			This is line 2
+			This is line 3
+		end-value
+```
 
