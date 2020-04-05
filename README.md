@@ -66,3 +66,20 @@ The keys can be any combination of uppercase letters (A-Z), lowercase letters (a
 	/[a-zA-Z0-9_-]+/
 ```
 
+## Arrays
+Append a pair of square brackets to indicate that the value would be an array. Specify each value on its own line. Start each value on its own line starting with a dash-space. The value begins from the first non-space character after the dash (-) up to the end of the line.
+```
+	array-value[] =
+		- This is the first item in this array
+		- This is the second item in this array
+		- And this is the third item in this array
+```
+
+The default separator for arrays is comma-space. Put comma-space between the values.
+```
+	an-array-value[] = This, has, 4, values
+```
+Specify a separator between the square brackets
+```
+	use-slash-as-separator[/] = This / one / has / five / values
+```
