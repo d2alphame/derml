@@ -74,6 +74,30 @@ Append a pair of square brackets to indicate that the value would be an array. S
 		- This is the second item in this array
 		- And this is the third item in this array
 ```
+If an array item is too long to fit on a single line, use pipe-dash (|-) instead of just the dash. The spaces that surround are required.
+```
+	another-array-value[] =
+		|-	This array element is very,
+			very long and cannot fit on
+			a single line. Sorry 'bout
+			that
+		-	This is another element
+		-	This is a third element
+```
+If an array element is a multi-line value, use colon-dash (`:-`) instead and follow up with the delimiter. The delimiter is the first non-whitespace character after the `:-` up to the end of the line. The value ends on line that contains only the delimiter possibly surrounded by whitespaces.
+
+```
+	third-array[] =
+		-	first element
+		-	second element
+		-:	end value
+			This is the third element
+			It is a multi-line value
+			It has 3 lines
+			end value
+		-	This is the fourth element
+		-	This is the fifth
+```
 
 The default separator for arrays is comma-space. Put comma-space between the values.
 ```
