@@ -145,3 +145,11 @@ Use (`<=`) to assign the value of a previously assigned key to another.
 	my-second-key <= my-first-key
 ```
 ## Sections
+Specify sections by using two equals signs followed by the name of the section and ending with 2 equals.
+```
+	== Section 1 ==
+		my-first-key = This is the first value
+		my-second-key = This is the second value
+		my-third-key = This is the third value
+```
+Note the space after the first pair of equals (`==`) just before the second one. Those spaces must be added.
