@@ -136,3 +136,12 @@ Finally, the space can be used as separator by specifying the lower-case letter 
 ```
 	use-space-as-separator[s] = first-element second-element third-element
 ```
+## References
+Use (`<=`) to assign the value of a previously assigned key to another.
+```
+	my-first-key = This is the value of 'my-first-key'
+	
+	# Assign the value of 'my-first-key' to 'my-second-key'
+	my-second-key <= my-first-key
+```
+## Sections
