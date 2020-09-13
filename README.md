@@ -16,6 +16,14 @@ In their most basic forms, key-value pairs are represented thus:
 ```
 Note the whitespace around the equals (=) sign. They are compulsory and **must** be added.
 
+To quote values, use the colon (:) in place of the equals sign. The first non-whitespace character after the colon becomes the quote. This way comments can be added on the same line. E.g.
+```
+	key : (This is the value) 	# Using parentheses as the quote
+	a_second_key : /This uses the slashes as quote/		# With this style, comments can be added this way
+	angle-quote : <This value uses angular brackets as the quotes>
+	percentQuote : %Percent sign as the quote%
+```
+
 ### Values
 Values begin from the first non-whitespace character after the equal sign up to the end of the line.
 ```
