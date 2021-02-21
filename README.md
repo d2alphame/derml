@@ -14,7 +14,10 @@ In their most basic forms, key-value pairs are represented thus:
 ```
 	key = value
 ```
+Keys may be any combination of alphabets, numbers, dashes or underscores and may not begin with a number or a dash.
+
 Note the whitespace around the equals (=) sign. They are compulsory and **must** be added.
+Also note that keys are case-sensitive. So `mykey` is different from `Mykey` which is different from `MyKey`, etc.
 
 To quote values, use the colon (:) in place of the equals sign. The first non-whitespace character after the colon becomes the quote. This way comments can be added on the same line. E.g.
 ```
