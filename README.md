@@ -19,10 +19,14 @@ Keys may be any combination of alphabets, numbers, dashes or underscores and may
 Note the whitespace around the equals (=) sign. They are compulsory and **must** be added.
 Also note that keys are case-sensitive. So `mykey` is different from `Mykey` which is different from `MyKey`, etc.
 
-To quote values, use the colon (:) in place of the equals sign. The first non-whitespace character after the colon becomes the quote. This way comments can be added on the same line. E.g.
+Used in the above form, the value starts from the first non-whitespace character after the '=' sign up to the end of the line
+
+To quote values, use the colon (:) in place of the equals sign. The values may then be quoted with single-quotes ('),
+double-quotes ("), backticks (`), parentheses (()), braces({}), square-brackets ([]), or angular brackets(<>). A cpmment
+can be added after the quoted value
 ```
 	key : (This is the value) 	# Using parentheses as the quote
-	a_second_key : /This uses the slashes as quote/		# With this style, comments can be added this way
+	a_second_key : 'This uses single-quotes'	# 
 	angle-quote : <This value uses angular brackets as the quotes>
 	percentQuote : %Percent sign as the quote%
 ```
