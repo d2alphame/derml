@@ -109,58 +109,51 @@ If an array item is too long to fit on a single line, use the left angle (<) ins
 ```
 The long line ends with either the next element of the array, or the end of the array
 
-If an array element is a multi-line value, use colon-dash (`:-`) instead and follow up with the delimiter. The delimiter is the first non-whitespace character after the `:-` up to the end of the line. The value ends on line that contains only the delimiter possibly surrounded by whitespaces.
+If an array element is a multi-line value, use the pipe (`|`) instead and follow up with the delimiter. The delimiter is the first non-whitespace character after the `|` up to the end of the line. The value ends on line that contains only the delimiter possibly surrounded by whitespaces.
 
 ```
 	third-array[] =
-		-	first element
-		-	second element
-		-:	end value
+		=	first element
+		=	second element
+		|	end value
 			This is the third element
 			It is a multi-line value
 			It has 3 lines
 			end value
-		-	This is the fourth element
-		-	This is the fifth
+		=	This is the fourth element
+		=	This is the fifth
+		=
 ```
 
 ### Single Line Arrays
-Elements of an array can be specified on a single line. Specify the separator between between the square brackets. The separator _cannot_ be any of the characters allowed in names of keys except the letter s which is used to specify space as separator.
+Elements of an array can be specified on a single line. The elements of the array are expected to be quoted.
+Any of the six quotes for values may be used.
 
-The default separator is comma-space. Put comma-space between the values.
+#### Quoting Array Elements with Brackets
+The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
 ```
-	an-array-value[] = This, has, 4, values
+	parens-as-separators[] = (first item) (this is the second) (and this is the third)
+	square-brackets[] = [element number 1] [element number 2] [element number 3]
+	use-braces[] = {this is the first} {this is the second} {this is the third}
+	angular-bracket-separators[] = <Aang> <Katara> <Sokka> <Toph> <Zuko>
 ```
-Here are some arrays with different separators
+When using any of backtick(\`), apostrophe('), and double-quotes("), each array element must be surrounded by the quoting character _**and**_ seperated by comma-space. For example:
 ```
-	# Using forward slash as separator
-	use-slash-as-separator[/] = This / one / has / five / elements
-	
-	# Using ampersand as separator
-	use-ampersand-as-separator[&] = This & one & uses & ampersand and & has five elements
+	use-backtick-as-separator[] = `first`, `second`, `third`
+	use-apostrophe-as-separator[] = 'first', 'second', 'third'
+	use-double-quotes-separator[] = "first", "second", "third"
 ```
-The spaces surrounding the separators are required. So
+
+It's also possible to completely remove quoting and each group of non-whitespace character will be an array element.
+For example
 ```
-	# This, for example is not allowed. Separators should be surrounded by spaces
-	use-at-separator[@] = This@is@not@allowed
+	# This array has 4 elements in it
+	space-separated[] = 1 2 3 elements
+
+	# This is an array with 2 elements.
+	names[] = toph beifong
 ```
-The four brackets '()', '[]', '{}', '<>' can be used as seperators thus:
-```
-	parens-as-separators[()] = (first item) (this is the second) (and this is the third)
-	square-brackets[[]] = [element number 1] [element number 2] [element number 3]
-	use-braces[{}] = {this is the first} {this is the second} {this is the third}
-	angular-bracket-separators[<>] = <Aang> <Katara> <Sokka> <Toph> <Zuko>
-```
-When using any of the 3 quoting characters - backtick(\`), apostrophe('), and double-quotes("), each array element must be surrounded by the quoting character _**and**_ seperated by comma-space. For example:
-```
-	use-backtick-as-separator[`] = `first`, `second`, `third`
-	use-apostrophe-as-separator['] = 'first', 'second', 'third'
-	use-double-quotes-separator["] = "first", "second", "third"
-```
-Finally, the space can be used as separator by specifying the lower-case letter 's' as the separator. 
-```
-	use-space-as-separator[s] = first-element second-element third-element
-```
+
 ## References
 Use (`<=`) to assign the value of a previously assigned key to another.
 ```
@@ -169,7 +162,7 @@ Use (`<=`) to assign the value of a previously assigned key to another.
 	# Assign the value of 'my-first-key' to 'my-second-key'
 	my-second-key <= my-first-key
 ```
-## Sections
+## Named Sections
 Specify sections by using two equals signs followed by the name of the section and ending with 2 equals.
 ```
 	== Section 1 ==
@@ -178,3 +171,5 @@ Specify sections by using two equals signs followed by the name of the section a
 		my-third-key = This is the third value
 ```
 Note the space after the first pair of equals (`==`) just before the second one. Those spaces must be added.
+
+## Percent Blocks
