@@ -38,7 +38,8 @@ Values begin from the first non-whitespace character after the equal sign up to 
 In the above example, the value begins from the letter 'M' up to the last character on that line.  
 In the case of quoted values, The values will be within the selected quotes. For example
 ```
-	executables_dir = {C:/Program Files}	# Quoted with braces
+	executables_dir : {C:/Program Files}	# Quoted with braces
+	use_double_quotes : "E familia"			# Quoted with double-quotes
 ```
 
 #### Long values
@@ -76,12 +77,13 @@ If the value is a multi-line value, use the pipe (`|`) and follow with a delimit
 		end-value
 ```
 Do not forget the whitespace around `|`. All initial whitespace is removed. This implies that you end up with a left-aligned
-paragraph
+paragraph.
 
 ### Keys
-The keys can be any combination of uppercase letters (A-Z), lowercase letters (a-z), numbers (0-9), dash, and underscore. So in regex that would be
+The keys can be any combination of uppercase letters (A-Z), lowercase letters (a-z), numbers (0-9), dash, and underscore.
+Keys cannot start with a dash or a number. This means the regex for keys would be
 ```
-	/[a-zA-Z0-9_-]+/
+	/[a-zA-Z_][a-zA-Z0-9_-]+/
 ```
 
 ## Arrays
