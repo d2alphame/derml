@@ -87,23 +87,28 @@ Keys cannot start with a dash or a number. This means the regex for keys would b
 ```
 
 ## Arrays
-Append a pair of square brackets to indicate that the value would be an array. Specify each value on its own line. Start each value on its own line starting with a dash-space. The value begins from the first non-space character after the dash (-) up to the end of the line.
+Append a pair of square brackets to indicate that the value would be an array. Specify each value on its own line. Start each value on its own line starting with indentation and followed by equals-space. The value begins from the first non-space character after the equals sign (=) up to the end of the line. End the array values with an empty element
 ```
-	array-value[] =
-		- This is the first item in this array
-		- This is the second item in this array
-		- And this is the third item in this array
+	array-value[]
+		= This is the first item in this array
+		= This is the second item in this array
+		= And this is the third item in this array
+		=
 ```
-If an array item is too long to fit on a single line, use pipe-dash (|-) instead of just the dash. The spaces that surround are required.
+
+If an array item is too long to fit on a single line, use the left angle (<) instead of dash. The surrounding spaces are required.
 ```
-	another-array-value[] =
-		|-	This array element is very,
+	another-array-value[]
+		<	This array element is very,
 			very long and cannot fit on
 			a single line. Sorry 'bout
 			that
-		-	This is another element
-		-	This is a third element
+		=	This is another element
+		=	This is a third element
+		=
 ```
+The long line ends with either the next element of the array, or the end of the array
+
 If an array element is a multi-line value, use colon-dash (`:-`) instead and follow up with the delimiter. The delimiter is the first non-whitespace character after the `:-` up to the end of the line. The value ends on line that contains only the delimiter possibly surrounded by whitespaces.
 
 ```
