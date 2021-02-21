@@ -21,14 +21,13 @@ Also note that keys are case-sensitive. So `mykey` is different from `Mykey` whi
 
 Used in the above form, the value starts from the first non-whitespace character after the '=' sign up to the end of the line
 
-To quote values, use the colon (:) in place of the equals sign. The values may then be quoted with single-quotes ('),
-double-quotes ("), backticks (`), parentheses (()), braces({}), square-brackets ([]), or angular brackets(<>). A cpmment
+To use quoted values instead, use the colon (:) in place of the equals sign. The values may then be quoted with single-quotes ('), double-quotes ("), backticks (`), parentheses (()), braces({}), square-brackets ([]), or angular brackets(<>). A comment
 can be added after the quoted value
 ```
 	key : (This is the value) 	# Using parentheses as the quote
-	a_second_key : 'This uses single-quotes'	# 
+	a_second_key : 'This uses single-quotes'	# Comments may be added
 	angle-quote : <This value uses angular brackets as the quotes>
-	percentQuote : %Percent sign as the quote%
+
 ```
 
 ### Values
@@ -36,19 +35,20 @@ Values begin from the first non-whitespace character after the equal sign up to 
 ```
 	intro = My name Deji Adegbite
 ```
-In the above example, the value begins from the letter 'M' up to the last character on that line.
-
-Keys are case-sensitive so `mykey` is different from `myKey`, which is different from `MYKEY`, which is different from `MyKey`,
-you get the picture.
+In the above example, the value begins from the letter 'M' up to the last character on that line.  
+In the case of quoted values, The values will be within the selected quotes. For example
+```
+	executables_dir = {C:/Program Files}	# Quoted with braces
+```
 
 #### Long values
 Sometimes values are too long to fit on a single line, for example:
 ```
 	long-value = This is a value that is really, really long and which we would like to break down into multiple lines because who wants to read this?
 ```
-Use pipe-equals (|=) instead of just equals (=) sign and end the value with a blank line. So the above could be re-written thus:
+Use the left-angle (<) instead of equals (=) sign and end the value with a blank line. So the above could be re-written thus:
 ```
-	long-value |=
+	long-value <
 		This is a value
 		that is really,
 		really long and
@@ -62,18 +62,21 @@ Use pipe-equals (|=) instead of just equals (=) sign and end the value with a bl
 					
 	another_key = another value
 ```
-Note the blank line between the long value and the next key. Also note the whitespace before `|=` as it is a must.
+Note the blank line between the long value and the next key. Also note the whitespace before `<` as it is a must.  
+The initial indentation on the first line of the value will be stripped off while the initial indentation for the
+remaining lines will be concatenated into one space.
 
 #### Multi-line values
-If the value is a multi-line value, use colon-equals (`:=`) and follow with a delimiter. The delimiter starts from the first non-whitespace character after `:=` up to the end of the line. The delimiter on a line by itself (and possibly surrounded by whitespace) marks the end of the of the multi-line value.
+If the value is a multi-line value, use the pipe (`|`) and follow with a delimiter. The delimiter starts from the first non-whitespace character after `|` up to the end of the line. The delimiter on a line by itself (and possibly surrounded by whitespace) marks the end of the of the multi-line value.
 ```
-	multi-line-value := end-value
+	multi-line-value | end-value
 			This is line 1
 			This is line 2
 			This is line 3
 		end-value
 ```
-Do not forget the whitespace around `:=`.
+Do not forget the whitespace around `|`. All initial whitespace is removed. This implies that you end up with a left-aligned
+paragraph
 
 ### Keys
 The keys can be any combination of uppercase letters (A-Z), lowercase letters (a-z), numbers (0-9), dash, and underscore. So in regex that would be
