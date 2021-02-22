@@ -179,6 +179,17 @@ Use (`<=`) to assign the value of a previously assigned key to another.
 	# Assign the value of 'my-first-key' to 'my-second-key'
 	my-second-key <= my-first-key
 ```
+Referencing other values can also be used in multiple line arrays. 
+```
+	aKey = This is a key
+	referencing[]
+		=	first element
+		= 	second element
+		*	aKey
+		=	
+```
+Note that the referencing symbol here is the asterisk (`*`) rather than the arrow (`<=`)
+
 ## Named Sections
 Specify sections by using two equals signs followed by the name of the section and ending with 2 equals.
 ```
