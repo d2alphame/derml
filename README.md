@@ -87,6 +87,10 @@ Keys cannot start with a dash or a number. This means the regex for keys would b
 ```
 
 ## Arrays
+Elements of an array can be specified in one of two possible ways; Multiple line in which each element is on a line by itself
+and Single line in which all elements of the array are specified on a single line
+
+### Multiple Line Arrays
 Append a pair of square brackets to indicate that the value would be an array. Specify each value on its own line. Start each value on its own line starting with indentation and followed by equals-space. The value begins from the first non-space character after the equals sign (=) up to the end of the line. End the array values with an empty element
 ```
 	array-value[]
@@ -109,10 +113,10 @@ If an array item is too long to fit on a single line, use the left angle (<) ins
 ```
 The long line ends with either the next element of the array, or the end of the array
 
-If an array element is a multi-line value, use the pipe (`|`) instead and follow up with the delimiter. The delimiter is the first non-whitespace character after the `|` up to the end of the line. The value ends on line that contains only the delimiter possibly surrounded by whitespaces.
+If an array element is a multi-line value, use the pipe (`|`) instead and follow up with the delimiter. The delimiter is the first non-whitespace character after the `|` up to the end of the line. The value ends on a line that contains only the delimiter possibly surrounded by whitespaces.
 
 ```
-	third-array[] =
+	third-array[]
 		=	first element
 		=	second element
 		|	end value
@@ -126,7 +130,18 @@ If an array element is a multi-line value, use the pipe (`|`) instead and follow
 ```
 
 ### Single Line Arrays
-Elements of an array can be specified on a single line.
+By default, single line arrays are specified thus:
+```
+	my-single-line-array[] = element 1, element 2, this is element 3, and this is element 4
+```
+The elements of the array are simply separated with comma-space. Anything that is not comma-space belongs to an element.
+Here are some other examples
+```
+	even-numbers[] = 2, 4, 6, 8, 10, 12
+	the-gaang[] = Aang, Katara, Sokka, Toph, Zuko
+```
+Quoting mechanisms may be used, however. To do that, replace the equals `=` sign with a colon `:` and surround each element
+with the desired quote.
 
 #### Quoting Array Elements with Brackets
 The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
@@ -149,10 +164,10 @@ It's also possible to completely remove quoting and each group of non-whitespace
 For example
 ```
 	# This array has 4 elements in it
-	space-separated[] = 1 2 3 elements
+	space-separated[] : 1 2 3 elements
 
 	# This is an array with 2 elements.
-	names[] = toph beifong
+	names[] : toph beifong
 ```
 
 ## References
