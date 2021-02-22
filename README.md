@@ -190,14 +190,33 @@ Referencing other values can also be used in multiple line arrays.
 ```
 Note that the referencing symbol here is the asterisk (`*`) rather than the arrow (`<=`)
 
-## Named Sections
-Specify sections by using two equals signs followed by the name of the section and ending with 2 equals.
+## Sections
+Use colon followed immediately by a section name to specify a section. The section name follows the same rules for naming keys.
+That is `[A-Za-z_][A-Za-z0-9_-]+`
 ```
-	== Section 1 ==
+	:Section-1
 		my-first-key = This is the first value
 		my-second-key = This is the second value
-		my-third-key = This is the third value
+		an-array[] = first, second, third, fourth
+		elements[]
+			= air nomads
+			= water tribe
+			= earth kingdom
+			= fire nation
+			=
+	:Section-2
+		song |
+			It's a long, long way to Ba Sing Se
+			And girls in the city
+			They're so pretty
+		therapy-section <
+			Zuko, you must look within yourself,
+			to find your true self. Oonly then
+			will your true self find your other self
+
 ```
-Note the space after the first pair of equals (`==`) just before the second one. Those spaces must be added.
+Arrays and key-value pairs are nested under sections. In derml, the beginning of a new section implies the ending of the
+previous one. This means sections cannot be nested
 
 ## Percent Blocks
+## Directives
