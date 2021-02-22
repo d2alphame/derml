@@ -126,22 +126,23 @@ If an array element is a multi-line value, use the pipe (`|`) instead and follow
 ```
 
 ### Single Line Arrays
-Elements of an array can be specified on a single line. The elements of the array are expected to be quoted.
-Any of the six quotes for values may be used.
+Elements of an array can be specified on a single line.
 
 #### Quoting Array Elements with Brackets
 The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
 ```
-	parens-as-separators[] = (first item) (this is the second) (and this is the third)
-	square-brackets[] = [element number 1] [element number 2] [element number 3]
-	use-braces[] = {this is the first} {this is the second} {this is the third}
-	angular-bracket-separators[] = <Aang> <Katara> <Sokka> <Toph> <Zuko>
+	parens-as-separators[] : (first item) (this is the second) (and this is the third)
+	square-brackets[] : [element number 1] [element number 2] [element number 3]
+	use-braces[] : {this is the first} {this is the second} {this is the third}
+	angular-bracket-separators[] : <Aang> <Katara> <Sokka> <Toph> <Zuko>
 ```
+
+#### Quoting Array Elements with Quotes.
 When using any of backtick(\`), apostrophe('), and double-quotes("), each array element must be surrounded by the quoting character _**and**_ seperated by comma-space. For example:
 ```
-	use-backtick-as-separator[] = `first`, `second`, `third`
-	use-apostrophe-as-separator[] = 'first', 'second', 'third'
-	use-double-quotes-separator[] = "first", "second", "third"
+	use-backtick-as-separator[] : `first`, `second`, `third`
+	use-apostrophe-as-separator[] : 'first', 'second', 'third'
+	use-double-quotes-separator[] : "first", "second", "third"
 ```
 
 It's also possible to completely remove quoting and each group of non-whitespace character will be an array element.
