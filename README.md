@@ -7,7 +7,6 @@ Lines that begin with the hash (#) are comments. Comments go on to the end of th
 	# This is a comment
 ```
 Comments may also be indented, so the (#) has to be the first non-whitespace character on the line to make the line a comment.
-One final thing about comments is that they sit on a line on their own.
 
 ## Key-Value Pairs
 In their most basic forms, key-value pairs are represented thus:
@@ -27,13 +26,12 @@ can be added after the quoted value
 	key : (This is the value) 	# Using parentheses as the quote
 	a_second_key : 'This uses single-quotes'	# Comments may be added
 	angle-quote : <This value uses angular brackets as the quotes>
-
 ```
 
 ### Values
 Values begin from the first non-whitespace character after the equal sign up to the end of the line.
 ```
-	intro = My name Deji Adegbite
+	intro = My name is Deji Adegbite
 ```
 In the above example, the value begins from the letter 'M' up to the last character on that line.  
 In the case of quoted values, The values will be within the selected quotes. For example
@@ -100,7 +98,7 @@ Append a pair of square brackets to indicate that the value would be an array. S
 		=
 ```
 
-If an array item is too long to fit on a single line, use the left angle (<) instead of dash. The surrounding spaces are required.
+If an array item is too long to fit on a single line, use the left angle (<) instead of equals. The surrounding spaces are required.
 ```
 	another-array-value[]
 		<	This array element is very,
@@ -146,10 +144,10 @@ with the desired quote.
 #### Quoting Array Elements with Brackets
 The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
 ```
-	parens-as-separators[] : (first item) (this is the second) (and this is the third)
-	square-brackets[] : [element number 1] [element number 2] [element number 3]
+	parens-as-quotes[] : (first item) (this is the second) (and this is the third)
+	square-brackets-as-quotes[] : [element number 1] [element number 2] [element number 3]
 	use-braces[] : {this is the first} {this is the second} {this is the third}
-	angular-bracket-separators[] : <Aang> <Katara> <Sokka> <Toph> <Zuko>
+	angular-brackets[] : <Aang> <Katara> <Sokka> <Toph> <Zuko>
 ```
 Note in the above examples that the equals sign has been replaced with a colon.
 
@@ -198,7 +196,7 @@ That is `[A-Za-z_][A-Za-z0-9_-]+`
 		my-first-key = This is the first value
 		my-second-key = This is the second value
 		an-array[] = first, second, third, fourth
-		elements[]
+		races[]
 			= air nomads
 			= water tribe
 			= earth kingdom
