@@ -172,3 +172,51 @@ sub simple_key_value_with_back_quote {
 		return 0;
 	}
 }
+
+
+
+# Check if assigning long value to a key
+sub long_value_assignment {
+	
+	$_ = shift;
+
+	# Match first line of assignment of long values thus:
+	# key <
+	# The long value follows from the next line
+	if(/^\s*($var_name_regex)\s+<\s*$/) {
+
+	}
+}
+
+
+
+# Returns the formatted first line of a long value. The first
+# line of a long value requires a special formatting different
+# from that of the rest of the lines
+sub get_first_line_of_long_value {
+
+	# Get the next line, which is assumed to be the first line of a long value and strip off the leading spaces
+	# Return whatever is left after stripping
+	$_ = <>;
+	s/^\s*//;
+	chomp;			# Don't forget to remove the newline character at the end of the string
+	return $_;
+}
+
+
+
+# Returns the formatted following lines of a long value
+# Concatenate all leading spaces into a single space.
+sub get_rest_of_long_value {
+
+	my $tmp = "";
+
+	while(<>) {
+		last if /^$/;				# We're done once we encounter a blank line
+		s/^\s*/ /;					# Concatenate all leading spaces into a single space
+		chomp;						# Remove the newline character at the end of the string
+		$tmp .= $_;					# Append to lines we've found
+	}
+
+	return $tmp;
+}
