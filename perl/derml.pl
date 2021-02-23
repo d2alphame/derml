@@ -1,9 +1,10 @@
 # A Perl Module for parsing derml
 
-use v5.26;									# Use perl version 5.26 and above
+use v5.26;												# Use perl version 5.26 and above
 
 my %global;												# All Key-Value pairs found go in here
-my $var_name_regex = qr{[a-zA-Z_][A-Za-z0-9_-]+};		# Regex for key and section names	
+
+my $var_name_regex = qr{[a-zA-Z_][A-Za-z0-9_-]+};		# Regex for key and section names
 
 # Read lines from files specified at the terminal
 while(<>) {
