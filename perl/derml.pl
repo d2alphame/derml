@@ -8,7 +8,7 @@ my $var_name_regex = qr{[a-zA-Z_][A-Za-z0-9_-]+};		# Regex for key and section n
 # Read lines from files specified at the terminal
 while(<>) {
 	next if /^\s*#/;							# Ignore comments
-	simple_key_value_with_back_quote($_);
+	multiline_value_assignment($_);
 }
 
 say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
@@ -179,15 +179,44 @@ sub simple_key_value_with_back_quote {
 sub long_value_assignment {
 	
 	$_ = shift;
+	my $tmp = "";
 
 	# Match first line of assignment of long values thus:
 	# key <
 	# The long value follows from the next line
 	if(/^\s*($var_name_regex)\s+<\s*$/) {
-
+		$tmp .= get_first_line_of_long_value() . get_rest_of_long_value();
+		$global{$1} = $tmp;
+		return 1;
+	}
+	else {
+		return 0;
 	}
 }
 
+
+
+# Check if assigning multiline value to a key. Note that all
+# leading spaces are stripped off from all the lines.
+sub multiline_value_assignment {
+
+	my $key; my $delimiter; my $tmp = "";
+	if(/^\s*($var_name_regex)\s+\|\s+(\S.*)/) {
+		$key = $1; $delimiter = $2;
+
+		while(<>) {
+			last if /^\s*$delimiter/;
+			s/^\s*//;
+			$tmp .= $_;
+		}
+
+		$global{$key} = $tmp;
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
 
 
 # Returns the formatted first line of a long value. The first
@@ -212,7 +241,7 @@ sub get_rest_of_long_value {
 	my $tmp = "";
 
 	while(<>) {
-		last if /^$/;				# We're done once we encounter a blank line
+		last if /^\s*$/;			# We're done once we encounter a blank line
 		s/^\s*/ /;					# Concatenate all leading spaces into a single space
 		chomp;						# Remove the newline character at the end of the string
 		$tmp .= $_;					# Append to lines we've found
