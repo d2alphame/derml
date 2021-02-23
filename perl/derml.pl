@@ -50,7 +50,7 @@ sub simple_key_value_with_paren_quote {
 	# Check if quoted with parentheses
 	# Match:
 	# Key : (Value)
-	if(/\s*($var_name_regex)\s+:\s+\(([^\)]+?)\)/) {
+	if(/^\s*($var_name_regex)\s+:\s+\(([^\)]+?)\)/) {
 		$global{$1} = $2;
 		return 1;
 	}
@@ -69,7 +69,7 @@ sub simple_key_value_with_brace_quote {
 	# Check if quoted with braces
 	# Match:
 	# Key : {Value}
-	if(/\s*($var_name_regex)\s+:\s+\{([^}]+?)\}/) {
+	if(/^\s*($var_name_regex)\s+:\s+\{([^}]+?)\}/) {
 		$global{$1} = $2;
 		return 1;
 	}
@@ -88,7 +88,7 @@ sub simple_key_value_with_square_quote {
 	# Check if quoted with braces
 	# Match:
 	# Key : [Value]
-	if(/\s*($var_name_regex)\s+:\s+\[([^\]]+?)\]/) {
+	if(/^\s*($var_name_regex)\s+:\s+\[([^\]]+?)\]/) {
 		$global{$1} = $2;
 		return 1;
 	}
@@ -107,7 +107,7 @@ sub simple_key_value_with_angle_quote {
 	# Check if quoted with angular brackets
 	# Match:
 	# Key : <Value>
-	if(/\s*($var_name_regex)\s+:\s+<([^>]+?)>/) {
+	if(/^\s*($var_name_regex)\s+:\s+<([^>]+?)>/) {
 		$global{$1} = $2;
 		return 1;
 	}
@@ -126,7 +126,7 @@ sub simple_key_value_with_single_quote {
 	# Check if quoted with single quotes
 	# Match:
 	# Key : 'Value'
-	if(/\s*($var_name_regex)\s+:\s+'([^']+?)'/) {
+	if(/^\s*($var_name_regex)\s+:\s+'([^']+?)'/) {
 		$global{$1} = $2;
 		return 1;
 	}
@@ -145,7 +145,7 @@ sub simple_key_value_with_double_quote {
 	# Check if quoted with double quotes
 	# Match:
 	# Key : "Value"
-	if(/\s*($var_name_regex)\s+:\s+"([^"]+?)"/) {
+	if(/^\s*($var_name_regex)\s+:\s+"([^"]+?)"/) {
 		$global{$1} = $2;
 		return 1;
 	}
@@ -164,7 +164,7 @@ sub simple_key_value_with_back_quote {
 	# Check if quoted with back quotes
 	# Match:
 	# Key : `Value`
-	if(/\s*($var_name_regex)\s+:\s+\`([^`]+?)\`/) {
+	if(/^\s*($var_name_regex)\s+:\s+\`([^`]+?)\`/) {
 		$global{$1} = $2;
 		return 1;
 	}
