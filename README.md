@@ -186,7 +186,16 @@ Referencing other values can also be used in multiple line arrays.
 		*	aKey
 		=	
 ```
-Note that the referencing symbol here is the asterisk (`*`) rather than the arrow (`<=`)
+Note that the referencing symbol here is the asterisk (`*`) rather than the arrow (`<=`). References can be done in Single Arrays in a similar manner.
+```
+	FirePrince = Zuko
+	FireFamily[] : (Ozai) (Ursa) (Azula) *(FirePrince)
+
+	# Another example
+	best_pet = Nyla
+	pets[] : "Appa", "Momo", *best_pet, "Flopsie"
+``` 
+The referencing here only works when the array elements are quoted or when the elements are on separate lines.
 
 ## Sections
 Use colon followed immediately by a section name to specify a section. The section name follows the same rules for naming keys.
@@ -216,5 +225,25 @@ That is `[A-Za-z_][A-Za-z0-9_-]+`
 Arrays and key-value pairs are nested under sections. In derml, the beginning of a new section implies the ending of the
 previous one. This means sections cannot be nested
 
-## Percent Blocks
+## Percent Blocks and Strings
+Percent Strings are lines that begin with the percent-space `% ` (there's a space after the '%' sign). These strings can contain anything programmers/authors of tools are free tos make use of these strings as they see fit. 
+```
+	% This is a percent string.
+```
+Just like percent strings, there are also percent blocks which authors of tools can do anything they like with. The block is between a pair of `%%`.
+```
+	%%
+		This is a percent block
+		It begins with and ends with
+		%% but does not include them
+	%%
+```
 ## Directives
+Directives control the way a section is parsed. They are specified using the at (@) symbol. An example of a directive is
+```
+	# The following directive tells the parser to remove extra
+	# spaces at the of a value string
+	@strip
+	:HasExtraSpaces
+		shall_strip = There are spaces at the end of this value   
+```
