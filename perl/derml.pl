@@ -86,7 +86,7 @@ sub simple_key_value_with_square_quote {
 
 	$_ = shift;
 
-	# Check if quoted with braces
+	# Check if quoted with square brackets
 	# Match:
 	# Key : [Value]
 	if(/^\s*($var_name_regex)\s+:\s+\[([^\]]+?)\]/) {
@@ -119,7 +119,7 @@ sub simple_key_value_with_angle_quote {
 
 
 
-# Check if value in key-value pair is quoted with angular brackets
+# Check if value in key-value pair is quoted with single quotes
 sub simple_key_value_with_single_quote {
 
 	$_ = shift;
@@ -206,7 +206,7 @@ sub multiline_value_assignment {
 		$key = $1; $delimiter = $2;
 
 		while(<>) {
-			last if /^\s*$delimiter/;
+			last if /^\s*$delimiter\s*$/;
 			s/^\s*//;
 			$tmp .= $_;
 		}
@@ -249,4 +249,22 @@ sub get_rest_of_long_value {
 	}
 
 	return $tmp;
+}
+
+
+
+# Returns the content of a parens quoted item
+sub get_parens_content {
+
+	$_ = shift;
+	return $1 if /\((\S[^\)]*?)\)/;					# Return anything between a pair of parentheses
+	return "";										# If there's no such, return an empty string (i.e. false)
+}
+
+# Returns the content of a braces quoted item
+sub get_brace_content {
+
+	$_ = shift;
+	return $1 if /\{(\S[^\}]*?\}/;
+	return "";
 }
