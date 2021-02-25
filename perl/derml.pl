@@ -273,3 +273,8 @@ sub get_brace_content {
 sub get_angle_content {
 
 }
+
+# Returns the content of a square bracketed item
+sub get_square_content {
+	
+}
