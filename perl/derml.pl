@@ -268,3 +268,8 @@ sub get_brace_content {
 	return $1 if /\{(\S[^\}]*?\}/;
 	return "";
 }
+
+# Returns the content of an angle quoted item
+sub get_angle_content {
+
+}
