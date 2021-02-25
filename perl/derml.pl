@@ -286,5 +286,10 @@ sub get_double_quote_content {
 
 # Returns the content of single-quote
 sub get_single_quote_content {
+
+}
+
+# Returns the content of back-quoted item
+sub get_back_quote_content {
 	
 }
