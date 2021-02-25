@@ -276,5 +276,10 @@ sub get_angle_content {
 
 # Returns the content of a square bracketed item
 sub get_square_content {
+
+}
+
+# Returns the content of double-quote
+sub get_double_quote_content {
 	
 }
