@@ -291,5 +291,7 @@ sub get_single_quote_content {
 
 # Returns the content of back-quoted item
 sub get_back_quote_content {
-	
+
 }
+
+# TODO: Add POD documentation
