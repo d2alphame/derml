@@ -281,5 +281,10 @@ sub get_square_content {
 
 # Returns the content of double-quote
 sub get_double_quote_content {
+
+}
+
+# Returns the content of single-quote
+sub get_single_quote_content {
 	
 }
