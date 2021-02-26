@@ -9,7 +9,7 @@ my $var_name_regex = qr{[a-zA-Z_][A-Za-z0-9_-]+};		# Regex for key and section n
 # Read lines from files specified at the terminal
 while(<>) {
 	next if /^\s*#/;							# Ignore comments
-	multiline_value_assignment($_);
+	simple_key_value($_) && next;
 }
 
 say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
@@ -220,6 +220,27 @@ sub multiline_value_assignment {
 }
 
 
+
+# Check if a key is being assigned to by reference. This is done using '<='
+sub assignment_with_reference {
+
+	$_ = shift;
+
+	# Match:
+	# Key <= another_key
+	if(/^\s*($var_name_regex)\s+<=\s+($var_name_regex)$/) {
+		my $val = $global{$1};
+		$global{$2} = $val;
+		return 1;
+	}
+	else {
+		return 0;
+	}
+
+}
+
+
+
 # Returns the formatted first line of a long value. The first
 # line of a long value requires a special formatting different
 # from that of the rest of the lines
@@ -281,7 +302,7 @@ sub get_angle_content {
 sub get_square_content {
 
 	$_ = shift;
-	return $1 if /\{(\S[^\}]*?\}/;
+	return $1 if /\[(\S[^\]]*?\]/;
 	return "";
 }
 
