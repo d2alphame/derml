@@ -9,7 +9,8 @@ my $var_name_regex = qr{[a-zA-Z_][A-Za-z0-9_-]+};		# Regex for key and section n
 # Read lines from files specified at the terminal
 while(<>) {
 	next if /^\s*#/;							# Ignore comments
-	# simple_key_value($_) && assignment_with_reference(<>);
+	simple_key_value($_);
+	assignment_with_reference($_);
 }
 
 say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
@@ -229,8 +230,8 @@ sub assignment_with_reference {
 	# Match:
 	# Key <= another_key
 	if(/^\s*($var_name_regex)\s+<=\s+($var_name_regex)$/) {
-		my $val = $global{$1};
-		$global{$2} = $val;
+		my $val = $global{$2};
+		$global{$1} = $val;
 		return 1;
 	}
 	else {
