@@ -39,6 +39,21 @@ sub simple_key_value {
 # This sub routine checks if a line is a simple key value pair with the value being quoted
 sub simple_key_value_with_quote {
 
+	$_ = shift;
+	if(
+		simple_key_value_with_angle_quote($_)	||
+		simple_key_value_with_back_quote($_)	||
+		simple_key_value_with_brace_quote($_)	||
+		simple_key_value_with_double_quote($_)	||
+		simple_key_value_with_paren_quote($_)	||
+		simple_key_value_with_single_quote($_)	||
+		simple_key_value_with_square_quote($_)
+	) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
 
 }
 
