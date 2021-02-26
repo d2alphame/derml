@@ -9,7 +9,7 @@ my $var_name_regex = qr{[a-zA-Z_][A-Za-z0-9_-]+};		# Regex for key and section n
 # Read lines from files specified at the terminal
 while(<>) {
 	next if /^\s*#/;							# Ignore comments
-	simple_key_value($_) && next;
+	# simple_key_value($_) && assignment_with_reference(<>);
 }
 
 say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
@@ -286,7 +286,7 @@ sub get_parens_content {
 sub get_brace_content {
 
 	$_ = shift;
-	return $1 if /\{(\S[^\}]*?\}/;
+	return $1 if /\{(\S[^\}]*?)\}/;
 	return "";
 }
 
@@ -294,7 +294,7 @@ sub get_brace_content {
 sub get_angle_content {
 	
 	$_ = shift;
-	return $1 if /<(\S[^>]*?>/;
+	return $1 if /<(\S[^>]*?)>/;
 	return "";
 }
 
@@ -302,7 +302,7 @@ sub get_angle_content {
 sub get_square_content {
 
 	$_ = shift;
-	return $1 if /\[(\S[^\]]*?\]/;
+	return $1 if /\[(\S[^\]]*?)\]/;
 	return "";
 }
 
