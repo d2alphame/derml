@@ -58,7 +58,6 @@ sub simple_key_value_with_quote {
 }
 
 
-
 # Checks if the value in key-value pair is quoted with parentheses
 sub simple_key_value_with_paren_quote {
 
@@ -325,6 +324,9 @@ sub get_square_content {
 # Returns the content of double-quote
 sub get_double_quote_content {
 
+	$_ = shift;
+	return $1 if /"(\S[^"]*?)"/;
+	return "";
 }
 
 # Returns the content of single-quote
