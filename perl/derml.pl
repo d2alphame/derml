@@ -271,12 +271,18 @@ sub get_brace_content {
 
 # Returns the content of an angle quoted item
 sub get_angle_content {
-
+	
+	$_ = shift;
+	return $1 if /<(\S[^>]*?>/;
+	return "";
 }
 
 # Returns the content of a square bracketed item
 sub get_square_content {
 
+	$_ = shift;
+	return $1 if /\{(\S[^\}]*?\}/;
+	return "";
 }
 
 # Returns the content of double-quote
