@@ -363,7 +363,12 @@ sub get_back_quote_content {
 
 # Checks for a quoted reference i.e. the * symbol followed by a quoted value
 sub get_quoted_refernce {
-	
+
+	if(/\*/)
+
 }
+
+
+# TODO: Refactor into regexes for quoted items
 
 # TODO: Add POD documentation
