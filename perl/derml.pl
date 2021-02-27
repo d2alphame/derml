@@ -340,6 +340,9 @@ sub get_single_quote_content {
 # Returns the content of back-quoted item
 sub get_back_quote_content {
 
+	$_ = shift;
+	return $1 if /\`(\S[^`]*?)\`/;
+	return "";
 }
 
 # TODO: Add POD documentation
