@@ -292,7 +292,17 @@ sub get_rest_of_long_value {
 # Checks if a given string is a quoted item
 sub get_quoted_item {
 
-	if()
+	$_ = shift;
+
+	return
+		get_angle_content($_)			||
+		get_back_quote_content($_)		||
+		get_brace_content($_)			||
+		get_double_quote_content($_)	||
+		get_parens_content($_)			||
+		get_single_quote_content($_)	||
+		get_square_content($_)			||
+		"";
 }
 
 # Returns the content of a parens quoted item
