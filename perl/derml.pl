@@ -289,6 +289,12 @@ sub get_rest_of_long_value {
 
 
 
+# Checks if a given string is a quoted item
+sub get_quoted_item {
+
+	if()
+}
+
 # Returns the content of a parens quoted item
 sub get_parens_content {
 
@@ -344,5 +350,6 @@ sub get_back_quote_content {
 	return $1 if /\`(\S[^`]*?)\`/;
 	return "";
 }
+
 
 # TODO: Add POD documentation
