@@ -361,5 +361,9 @@ sub get_back_quote_content {
 	return "";
 }
 
+# Checks for a quoted reference i.e. the * symbol followed by a quoted value
+sub get_quoted_refernce {
+	
+}
 
 # TODO: Add POD documentation
