@@ -332,6 +332,9 @@ sub get_double_quote_content {
 # Returns the content of single-quote
 sub get_single_quote_content {
 
+	$_ = shift;
+	return $1 if /'(\S[^']*?)'/;
+	return "";
 }
 
 # Returns the content of back-quoted item
