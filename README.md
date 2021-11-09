@@ -169,34 +169,6 @@ For example
 	names[] : toph beifong
 ```
 
-## References
-Use (`<=`) to assign the value of a previously assigned key to another.
-```
-	my-first-key = This is the value of 'my-first-key'
-	
-	# Assign the value of 'my-first-key' to 'my-second-key'
-	my-second-key <= my-first-key
-```
-Referencing other values can also be used in multiple line arrays. 
-```
-	aKey = This is a key
-	referencing[]
-		=	first element
-		= 	second element
-		*	aKey
-		=	
-```
-Note that the referencing symbol here is the asterisk (`*`) rather than the arrow (`<=`). References can be done in Single Arrays in a similar manner.
-```
-	FirePrince = Zuko
-	FireFamily[] : (Ozai) (Ursa) (Azula) *(FirePrince)
-
-	# Another example
-	best_pet = Nyla
-	pets[] : "Appa", "Momo", *best_pet, "Flopsie"
-``` 
-The referencing here only works when the array elements are quoted or when the elements are on separate lines.
-
 ## Sections
 Use colon followed immediately by a section name to specify a section. The section name follows the same rules for naming keys.
 That is `[A-Za-z_][A-Za-z0-9_-]+`
