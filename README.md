@@ -159,14 +159,15 @@ When using any of backtick(\`), apostrophe('), and double-quotes("), each array 
 	use-double-quotes-separator[] : "first", "second", "third"
 ```
 
-It's also possible to completely remove quoting and each group of non-whitespace character will be an array element.
-For example
+There's a special case of assigning to an array while using the 'space' as the separator for the elements. Here's an
+example of that. Simply specify the name of the array followed by it's elements separated by spaces. In this case,
+anything not whitespace is part of an element.
 ```
 	# This array has 4 elements in it
-	space-separated[] : 1 2 3 elements
+	space-separated[] 1 2 3 elements
 
 	# This is an array with 2 elements.
-	names[] : toph beifong
+	names[] toph beifong
 ```
 
 ## Sections
