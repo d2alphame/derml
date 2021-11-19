@@ -3,14 +3,15 @@
 use v5.26;												# Use perl version 5.26 and above
 
 my %global;												# All Key-Value pairs found go in here
-
 my $var_name_regex = qr{[a-zA-Z][A-Za-z0-9_-]+};		# Regex for key and section names
 
 # Read lines from files specified at the terminal
 while(<>) {
 	next if /^\s*#/;							# Ignore comments
-	simple_key_value() && next;					# Simple key = value
-	simple_key_value_with_quote() && next;		# For Quoted key = 'value'
+	next if simple_key_value();					# Simple key = value
+	next if simple_key_value_with_quote();		# For Quoted key = 'value'
+	next if long_value_assignment();			# Check if assigning long value via '<'
+	next if multiline_value_assignment();		# Simple multiline value assignment via '|'
 }
 
 
@@ -29,8 +30,7 @@ sub simple_key_value {
 	}
 }
 
-
-
+ 
 # This sub routine checks if a line is a simple key value pair with the value being quoted
 sub simple_key_value_with_quote {
 
@@ -55,8 +55,6 @@ sub simple_key_value_with_quote {
 # Checks if the value in key-value pair is quoted with parentheses
 sub simple_key_value_with_paren_quote {
 
-	$_ = shift;
-
 	# Check if quoted with parentheses
 	# Match:
 	# Key : (Value)
@@ -73,8 +71,6 @@ sub simple_key_value_with_paren_quote {
 
 # Check if value in key-value pair is quoted with braces
 sub simple_key_value_with_brace_quote {
-
-	$_ = shift;
 
 	# Check if quoted with braces
 	# Match:
@@ -93,8 +89,6 @@ sub simple_key_value_with_brace_quote {
 # Check if value in key-value pair is quoted with square brackets
 sub simple_key_value_with_square_quote {
 
-	$_ = shift;
-
 	# Check if quoted with square brackets
 	# Match:
 	# Key : [Value]
@@ -107,12 +101,8 @@ sub simple_key_value_with_square_quote {
 	}
 }
 
-
-
 # Check if value in key-value pair is quoted with angular brackets
 sub simple_key_value_with_angle_quote {
-
-	$_ = shift;
 
 	# Check if quoted with angular brackets
 	# Match:
@@ -131,8 +121,6 @@ sub simple_key_value_with_angle_quote {
 # Check if value in key-value pair is quoted with single quotes
 sub simple_key_value_with_single_quote {
 
-	$_ = shift;
-
 	# Check if quoted with single quotes
 	# Match:
 	# Key : 'Value'
@@ -149,8 +137,6 @@ sub simple_key_value_with_single_quote {
 
 # Check if value in key-value pair is quoted with double quotes
 sub simple_key_value_with_double_quote {
-
-	$_ = shift;
 
 	# Check if quoted with double quotes
 	# Match:
@@ -169,8 +155,6 @@ sub simple_key_value_with_double_quote {
 # Check if value in key-value pair is quoted with back quotes
 sub simple_key_value_with_back_quote {
 
-	$_ = shift;
-
 	# Check if quoted with back quotes
 	# Match:
 	# Key : `Value`
@@ -188,7 +172,6 @@ sub simple_key_value_with_back_quote {
 # Check if assigning long value to a key
 sub long_value_assignment {
 	
-	$_ = shift;
 	my $tmp = "";
 
 	# Match first line of assignment of long values thus:
@@ -226,26 +209,6 @@ sub multiline_value_assignment {
 	else {
 		return 0;
 	}
-}
-
-
-
-# Check if a key is being assigned to by reference. This is done using '<='
-sub assignment_with_reference {
-
-	$_ = shift;
-
-	# Match:
-	# Key <= another_key
-	if(/^\s*($var_name_regex)\s+<=\s+($var_name_regex)$/) {
-		my $val = $global{$2};
-		$global{$1} = $val;
-		return 1;
-	}
-	else {
-		return 0;
-	}
-
 }
 
 
@@ -353,15 +316,6 @@ sub get_back_quote_content {
 	$_ = shift;
 	return $1 if /\`(\S[^`]*?)\`/;
 	return "";
-}
-
-# Checks for a quoted reference i.e. the * symbol followed by a quoted value
-sub get_quoted_refernce {
-
-	if(/\*/) {
-		
-	}
-
 }
 
 
