@@ -131,7 +131,8 @@ If an array element is a multi-line value, use the pipe (`|`) instead and follow
 By default, single line arrays are specified thus:
 ```
 	my-single-line-array[] = element 1, element 2, this is element 3, and this is element 4
-```
+```p;'
+/
 The elements of the array are simply separated with comma-space. Anything that is not comma-space belongs to an element.
 Here are some other examples
 ```
@@ -160,14 +161,13 @@ When using any of backtick(\`), apostrophe('), and double-quotes("), each array 
 ```
 
 There's a special case of assigning to an array while using the 'space' as the separator for the elements. Here's an
-example of that. Simply specify the name of the array followed by it's elements separated by spaces. In this case,
-anything not whitespace is part of an element.
+example of that. Use '@' to assign the elements to the array separating the elements with spaces. Everything not whitespace, would belong to an element. For example
 ```
 	# This array has 4 elements in it
-	space-separated[] 1 2 3 elements
+	space-separated[] @ 1 2 3 elements
 
 	# This is an array with 2 elements.
-	names[] toph beifong
+	names[] @ toph beifong
 ```
 
 ## Sections
