@@ -158,15 +158,17 @@ When using any of backtick(\`), apostrophe('), and double-quotes("), each array 
 	use-double-quotes-separator[] : "first", "second", "third"
 ```
 
+#### Separating array elements with spaces
 There's a special case of assigning to an array while using the 'space' as the separator for the elements. Here's an
-example of that. Use '@' to assign the elements to the array separating the elements with spaces. Everything not whitespace, would belong to an element. For example
+example of that. Prepend '@' to the name of the array to separate its elements with spaces. Everything not whitespace, would belong to an element. For example
 ```
 	# This array has 4 elements in it
-	space-separated[] @ 1 2 3 elements
+	@space-separated 1 2 3 elements
 
 	# This is an array with 2 elements.
-	names[] @ toph beifong
+	@names toph beifong
 ```
+Note the removal of the square brackets from the array's name.
 
 ## Sections
 Use colon followed immediately by a section name to specify a section. The section name follows the same rules for naming keys.
@@ -197,7 +199,7 @@ Arrays and key-value pairs are nested under sections. In derml, the beginning of
 previous one. This means sections cannot be nested
 
 ## Percent Blocks and Strings
-Percent Strings are lines that begin with the percent-space `% ` (there's a space after the '%' sign). These strings can contain anything programmers/authors of tools are free tos make use of these strings as they see fit. 
+Percent Strings are lines that begin with the percent-space `% ` (there's a space after the '%' sign). These strings can contain anything programmers/authors of tools are free to make use of these strings as they see fit. 
 ```
 	% This is a percent string.
 ```
