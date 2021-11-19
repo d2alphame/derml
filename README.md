@@ -131,8 +131,7 @@ If an array element is a multi-line value, use the pipe (`|`) instead and follow
 By default, single line arrays are specified thus:
 ```
 	my-single-line-array[] = element 1, element 2, this is element 3, and this is element 4
-```p;'
-/
+```
 The elements of the array are simply separated with comma-space. Anything that is not comma-space belongs to an element.
 Here are some other examples
 ```
