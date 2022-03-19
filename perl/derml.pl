@@ -12,11 +12,12 @@ while(<>) {
 	next if simple_key_value_with_quote();		# For Quoted key = 'value'
 	next if long_value_assignment();			# Check if assigning long value via '<'
 	next if multiline_value_assignment();		# Simple multiline value assignment via '|'
+	next if multiline_array();
 }
 
 
 say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
-
+say $global{'key15'}[2];
 
 # Just a simple `key = value`. Nothing to see here
 sub simple_key_value {
@@ -48,7 +49,6 @@ sub simple_key_value_with_quote {
 	else {
 		return 0;
 	}
-
 }
 
 
@@ -318,6 +318,57 @@ sub get_back_quote_content {
 	return "";
 }
 
+sub multiline_array {
+
+	my $key; my @tmp; my $tmpline;
+	if(/^\s*($var_name_regex)\[\]\s*$/) {
+		$key = $1;
+		while(<>) {
+			last if /^\s*=\s*$/;
+			last if /^\s*\|\s*$/;
+			last if /^\s*<\s*$/;
+
+			# Array element with simple assignment
+			if(/^\s+=\s+(\S.*)$/) {
+				push @tmp, $1;
+				next;
+			}
+
+			# Array element with line too long
+			if(/^\s+<\s+(\S.*)/) {
+				$tmpline = $1;
+				while(<>) {
+					last if /^\s*$/;
+					s/^\s*/ /;
+					chomp;
+					$tmpline .= $_;
+				}
+				push @tmp, $tmpline;
+				next;
+			}
+
+			# Multiline array element
+			if(/^\s+\|\s+(\S.*)/) {
+				my $delimiter = $1; my $tmpmultiline = "";
+				while(<>) {
+					last if(/^\s*$delimiter\s*$/);
+					s/^s+//;
+					print;
+					$tmpmultiline .= $_;
+				}
+
+				push @tmp, $tmpmultiline;
+				next;
+			}
+
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
 
 # TODO: Refactor into regexes for quoted items
 
