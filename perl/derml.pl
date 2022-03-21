@@ -7,17 +7,18 @@ my $var_name_regex = qr{[a-zA-Z][A-Za-z0-9_-]+};		# Regex for key and section na
 
 # Read lines from files specified at the terminal
 while(<>) {
-	next if /^\s*#/;							# Ignore comments
-	next if simple_key_value();					# Simple key = value
-	next if simple_key_value_with_quote();		# For Quoted key = 'value'
-	next if long_value_assignment();			# Check if assigning long value via '<'
-	next if multiline_value_assignment();		# Simple multiline value assignment via '|'
-	next if multiline_array();
+	# next if /^\s*#/;							# Ignore comments
+	# next if simple_key_value();					# Simple key = value
+	# next if simple_key_value_with_quote();		# For Quoted key = 'value'
+	# next if long_value_assignment();			# Check if assigning long value via '<'
+	# next if multiline_value_assignment();		# Simple multiline value assignment via '|'
+	# next if multiline_array();
+	single_line_apos_quoted_array();
 }
 
 
 say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
-say $global{'key15'}[2];
+say $global{'key21'}[2];
 
 # Just a simple `key = value`. Nothing to see here
 sub simple_key_value {
@@ -352,8 +353,7 @@ sub multiline_array {
 				my $delimiter = $1; my $tmpmultiline = "";
 				while(<>) {
 					last if(/^\s*$delimiter\s*$/);
-					s/^s+//;
-					print;
+					s/^\s+//;
 					$tmpmultiline .= $_;
 				}
 
@@ -361,6 +361,89 @@ sub multiline_array {
 				next;
 			}
 
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+# For processing single-line array
+sub single_line_array {
+
+}
+
+sub single_line_paren_quoted_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+:/g) {
+		my $key = $1;
+		while(/\G\s+\(([^\)]+)\)/gc){
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+sub single_line_brace_quoted_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+:/g) {
+		my $key = $1;
+		while(/\G\s+\{([^\}]+)\}/gc){
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+sub single_line_angle_quoted_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+:/g) {
+		my $key = $1;
+		while(/\G\s+<([^>]+)>/gc){
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+
+sub single_line_square_quoted_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+:/g) {
+		my $key = $1;
+		while(/\G\s+\[([^\]]+)\]/gc){
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+
+sub single_line_apos_quoted_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+:\s+'([^']+)'/g) {
+		my $key = $1;
+		push @tmp, $2;
+		while(/\G\s*,\s+'([^']+)'/gc) {
+			push @tmp, $1;
 		}
 		$global{$key} = [ @tmp ];
 		return 1;
