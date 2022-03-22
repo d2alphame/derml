@@ -7,13 +7,13 @@ my $var_name_regex = qr{[a-zA-Z][A-Za-z0-9_-]+};		# Regex for key and section na
 
 # Read lines from files specified at the terminal
 while(<>) {
-	# next if /^\s*#/;							# Ignore comments
-	# next if simple_key_value();					# Simple key = value
-	# next if simple_key_value_with_quote();		# For Quoted key = 'value'
-	# next if long_value_assignment();			# Check if assigning long value via '<'
-	# next if multiline_value_assignment();		# Simple multiline value assignment via '|'
-	# next if multiline_array();
-	simple_single_line_array();
+	next if /^\s*#/;							# Ignore comments
+	next if simple_key_value();					# Simple key = value
+	next if simple_key_value_with_quote();		# For Quoted key = 'value'
+	next if long_value_assignment();			# Check if assigning long value via '<'
+	next if multiline_value_assignment();		# Simple multiline value assignment via '|'
+	next if multiline_array();
+	next if single_line_array();
 }
 
 
@@ -372,7 +372,17 @@ sub multiline_array {
 
 # For processing single-line array
 sub single_line_array {
-
+	return
+		simple_single_line_array()			||
+		single_line_paren_quoted_array()	||
+		single_line_brace_quoted_array()	||
+		single_line_angle_quoted_array()	||
+		single_line_square_quoted_array()	||
+		single_line_apos_quoted_array()		||
+		single_line_dquot_quoted_array()	||
+		single_line_tick_quoted_array()		||
+		single_line_space_separated_array()	||
+		0
 }
 
 sub simple_single_line_array {
