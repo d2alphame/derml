@@ -13,12 +13,12 @@ while(<>) {
 	# next if long_value_assignment();			# Check if assigning long value via '<'
 	# next if multiline_value_assignment();		# Simple multiline value assignment via '|'
 	# next if multiline_array();
-	single_line_apos_quoted_array();
+	simple_single_line_array();
 }
 
 
 say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
-say $global{'key21'}[2];
+say $global{'key20'}[2];
 
 # Just a simple `key = value`. Nothing to see here
 sub simple_key_value {
@@ -375,6 +375,23 @@ sub single_line_array {
 
 }
 
+sub simple_single_line_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+=\s+([^\s,][^,]*)/g) {
+		my $key = $1;
+		push @tmp, $2;
+		while(/\G,\s+([^\s,][^,]*)/gc) {
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+
 sub single_line_paren_quoted_array {
 	my @tmp;
 	if(/\s*($var_name_regex)\[\]\s+:/g) {
@@ -443,6 +460,56 @@ sub single_line_apos_quoted_array {
 		my $key = $1;
 		push @tmp, $2;
 		while(/\G\s*,\s+'([^']+)'/gc) {
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+
+sub single_line_dquot_quoted_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+:\s+"([^"]+)"/g) {
+		my $key = $1;
+		push @tmp, $2;
+		while(/\G\s*,\s+"([^"]+)"/gc) {
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+
+sub single_line_tick_quoted_array {
+	my @tmp;
+	if(/\s*($var_name_regex)\[\]\s+:\s+\`([^`]+)\`/g) {
+		my $key = $1;
+		push @tmp, $2;
+		while(/\G\s*,\s+\`([^`]+)\`/gc) {
+			push @tmp, $1;
+		}
+		$global{$key} = [ @tmp ];
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
+
+sub single_line_space_separated_array {
+	my @tmp;
+	if(/@($var_name_regex)/g) {
+		my $key = $1;
+		while(/\G\s+(\S+)/gc) {
 			push @tmp, $1;
 		}
 		$global{$key} = [ @tmp ];
