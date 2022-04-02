@@ -1,0 +1,6 @@
+Revision history for Perl extension Parser::Derml.
+
+0.01  Sat Apr  2 19:27:48 2022
+	- original version; created by h2xs 1.23 with options
+		-AX --skip-exporter --use-new-tests -n Parser::Derml -b 5.26.0
+
