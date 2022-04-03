@@ -191,7 +191,7 @@ names. That is `[A-Za-z_][A-Za-z0-9_-]+`
 			And girls in the city
 			They're so pretty
 		END_SONG
-		
+
 		therapy-section <
 			Zuko, you must look within yourself,
 			to find your true self. Oonly then
@@ -213,13 +213,4 @@ Just like percent strings, there are also percent blocks which authors of tools 
 		It begins with and ends with
 		%% but does not include them
 	%%
-```
-## Directives
-Directives control the way a section is parsed. They are specified using the at (@) symbol. An example of a directive is
-```
-	# The following directive tells the parser to remove extra
-	# spaces at the of a value string
-	@strip
-	:HasExtraSpaces
-		shall_strip = There are spaces at the end of this value   
 ```
