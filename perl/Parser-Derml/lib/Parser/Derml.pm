@@ -1,17 +1,20 @@
 package Parser::Derml;
 
-use 5.026000;
+use 5.026000;                         # Use perl minimum version of 5.26
 use strict;
 use warnings;
+use Carp;
 
 our @ISA = qw();
 
 our $VERSION = '0.01';
 
+my $file;                             # This will be the handle to the derml file to parse
 
-# Preloaded methods go here.
-my speak = sub speak {
-  say 'wow';
+sub parse {
+  my $filename = shift;
+  open $file, '<', $filename
+    or croak "Could not open $filename: $!";
 }
 
 1;
