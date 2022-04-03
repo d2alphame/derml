@@ -10,6 +10,9 @@ our $VERSION = '0.01';
 
 
 # Preloaded methods go here.
+my speak = sub speak {
+  say 'wow';
+}
 
 1;
 __END__
@@ -17,7 +20,7 @@ __END__
 
 =head1 NAME
 
-Parser::Derml - Perl extension for blah blah blah
+Parser::Derml - Perl extension for parsing derml configuration format
 
 =head1 SYNOPSIS
 

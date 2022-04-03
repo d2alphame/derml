@@ -171,10 +171,11 @@ example of that. Prepend '@' to the name of the array to separate its elements w
 Note the removal of the square brackets from the array's name.
 
 ## Sections
-Use colon followed immediately by a section name to specify a section. The section name follows the same rules for naming keys.
-That is `[A-Za-z_][A-Za-z0-9_-]+`
+Surround section names with the section markers, i.e. open with 2 dashes and space/tab and
+close with 2 space or tab followed by 2 spaces. Section names follow the same rules as variable
+names. That is `[A-Za-z_][A-Za-z0-9_-]+`
 ```
-	:Section-1
+	-- Section-1 --
 		my-first-key = This is the first value
 		my-second-key = This is the second value
 		an-array[] = first, second, third, fourth
@@ -184,11 +185,13 @@ That is `[A-Za-z_][A-Za-z0-9_-]+`
 			= earth kingdom
 			= fire nation
 			=
-	:Section-2
-		song |
+	-- Section-2 --
+		song | END_SONG
 			It's a long, long way to Ba Sing Se
 			And girls in the city
 			They're so pretty
+		END_SONG
+		
 		therapy-section <
 			Zuko, you must look within yourself,
 			to find your true self. Oonly then
