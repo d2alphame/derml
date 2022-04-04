@@ -12,7 +12,9 @@ our $VERSION = '0.01';
 my $file;                             # This will be the handle to the derml file to parse
 
 sub parse {
-  my $filename = shift;
+  my %params = @_;
+  croak "Parameter 'filename' is required" unless $params{'filename'};
+  my $filename = $params{'filename'};
   open $file, '<', $filename
     or croak "Could not open $filename: $!";
 }
