@@ -17,6 +17,10 @@ sub parse {
   my $filename = $params{'filename'};
   open $file, '<', $filename
     or croak "Could not open $filename: $!";
+}
+
+
+my parse_settions = sub {
 
 }
 
@@ -31,7 +35,9 @@ Parser::Derml - Perl extension for parsing derml configuration format
 =head1 SYNOPSIS
 
   use Parser::Derml;
-  blah blah blah
+
+  # The simplest way to use Derml is to call 'parse' with the name of the file to parse
+  Parser::Derml::parse filename => 'file.derml'
 
 =head1 DESCRIPTION
 
