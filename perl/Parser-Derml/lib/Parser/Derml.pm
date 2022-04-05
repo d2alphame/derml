@@ -17,6 +17,7 @@ sub parse {
   my $filename = $params{'filename'};
   open $file, '<', $filename
     or croak "Could not open $filename: $!";
+
 }
 
 1;
