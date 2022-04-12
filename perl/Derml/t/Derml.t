@@ -8,7 +8,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 1;
+use Test::More;
+use Test::Exception;
 BEGIN { use_ok('Derml') };
 
 #########################
@@ -16,3 +17,4 @@ BEGIN { use_ok('Derml') };
 # Insert your test code below, the Test::More module is use()ed here so read
 # its man page ( perldoc Test::More ) for help writing this test script.
 
+done_testing();
