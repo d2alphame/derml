@@ -10,6 +10,7 @@ our @ISA = qw();
 our $VERSION = '0.01';
 
 my $file;                             # This will be the handle to the derml file to parse
+my $current_section = '$';            # This is the main section by default.    
 
 sub parse {
   my %params = @_;
@@ -34,19 +35,37 @@ Parser::Derml - Perl extension for parsing derml configuration format
 
 =head1 SYNOPSIS
 
-  use Parser::Derml;
+use Parser::Derml;
 
-  # The simplest way to use Derml is to call 'parse' with the name of the file to parse
-  Parser::Derml::parse filename => 'file.derml'
+The simplest way to use Derml is to call 'parse' with the name of the file to
+parse and a subroutine to run whenever a section is found.
+
+    Parser::Derml::parse filename => 'file.derml', action => \&my_sub
+
+In the above form, all sections in the file 'file.derml' will be parsed and for
+each section that is found, my_sub() will be called.
+
+my_sub should expect the following hash as parameter
+{
+  section => 'name_of_section',
+  data => {
+    key1 => value1,
+    key2 => value2
+    ...
+  }  
+}
+
+
+# The sections to be parsed can be specified
+Parser::Derml::parse(
+  filename => 'file.derml',
+  sections => [ 'Section1', 'Section2', 'Section3' ]
+)
+
 
 =head1 DESCRIPTION
 
-Stub documentation for Parser::Derml, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
-
-Blah blah blah.
-
+Parser::Derml Is a perl module which parses a simple configuration file format derml. 
 
 =head1 SEE ALSO
 
