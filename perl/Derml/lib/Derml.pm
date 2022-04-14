@@ -10,9 +10,22 @@ our @ISA = qw();
 our $VERSION = '0.01';
 
 
+my $file;											# This will be the handle to the file to parse
+my $received_sections_param = 0;					# Parse all sections by default						
+
 # Preloaded methods go here.
+
+# 
 sub derml {
 	my %params = @_;
+	croak "Parameter 'filename' is missing" unless $params{'filename'};
+	open ($file, '<', $params{'filename'})
+		or croak "Could not open $filename: $!";	
+}
+
+
+
+sub parse {
 
 }
 
@@ -27,7 +40,13 @@ Derml - Perl extension for blah blah blah
 =head1 SYNOPSIS
 
   use Derml;
-  blah blah blah
+  
+  # The simplest way to use Derml is to call derml with a filename parameter
+  my %data = derml filename => 'myfile.derml'
+
+  In the above form, derml returns a hash which contains the data as parsed.
+
+
 
 =head1 DESCRIPTION
 
