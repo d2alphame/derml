@@ -11,7 +11,8 @@ while(<>) {
 	next if simple_key_value();					# Simple key = value
 	next if simple_key_value_with_quote();		# For Quoted key = 'value'
 	next if long_value_assignment();			# Check if assigning long value via '<'
-	next if multiline_value_assignment();		# Simple multiline value assignment via '|'
+	#next if multiline_value_assignment();		# Simple multiline value assignment via '|'
+	next if multiline_array();
 }
 
 
@@ -242,6 +243,49 @@ sub get_rest_of_long_value {
 	}
 
 	return $tmp;
+}
+
+
+
+# Specifically for parsing arrays
+sub parse_array {
+	
+}
+
+
+# This is for multiline arrays
+sub multiline_array {
+	if(/^\s*($var_name_regex)\[\]\s*$/) {
+		my @array_items; my $item;
+		while($item = get_multiline_array_item()) {
+			say $item;
+		}
+		return 1
+	}
+}
+
+sub get_multiline_array_item {
+	my $line;
+	until(/^\s+=\s*$/) {
+		$_ = <>;
+		if(/^\s+=\s+(\S.*)$/) {
+			return $1
+		}
+		elsif(/^\s+<\s+(\S.*)$/) {
+			$line = $1;
+			until(/^\s*$/) {
+				$_ = <>;
+				if(/^\s+(\S.*)$/) {
+					$line .= " $1";
+					next;
+				}
+			}
+			return $line;
+		}
+		else {
+			return 0;
+		}
+	}
 }
 
 
