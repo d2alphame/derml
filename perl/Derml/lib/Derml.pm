@@ -3,6 +3,7 @@ package Derml;
 use 5.026001;
 use strict;
 use warnings;
+use Carp;
 
 our @ISA = qw();
 
@@ -10,6 +11,23 @@ our $VERSION = '0.01';
 
 
 # Preloaded methods go here.
+
+my %global;                           # Global hash to contain all the key and value pairs
+my $file;                             # File handle to the file to parse
+
+# Pass a filename to this funtion to parse it
+sub derml {
+  my $len = scalar @_;
+  if($len < 1) {
+    croak "Pass the name of the file to parse to derml";
+  }
+  elsif($len > 1) {
+    croak "Too many parameters passed to derml";
+  }
+
+  my $filename = shift;
+  open($file, '<', $filename) or croak "Could not open $filename: $!";
+}
 
 1;
 __END__
