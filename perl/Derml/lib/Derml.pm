@@ -12,8 +12,20 @@ our $VERSION = '0.01';
 
 # Preloaded methods go here.
 
-my %global;                           # Global hash to contain all the key and value pairs
+my %global;                           # Hash to contain all the key and value pairs
 my $file;                             # File handle to the file to parse
+my $current_section = "";
+
+my $varname = qr/[a-zA-Z_][a-zA-Z0-9_-]*/;
+
+
+my $parser = sub {
+
+  while(<$file>) {
+    next if //
+  }
+};
+
 
 # Pass a filename to this funtion to parse it
 sub derml {
@@ -27,7 +39,10 @@ sub derml {
 
   my $filename = shift;
   open($file, '<', $filename) or croak "Could not open $filename: $!";
+  $parser->();
+  return \%global;
 }
+
 
 1;
 __END__

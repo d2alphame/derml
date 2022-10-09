@@ -30,10 +30,17 @@ dies_ok { Derml::derml($filename) }	'Non-existent file';
 
 done_testing;
 
-
 # Returns a random string
 sub generate_random_string {
 	my $result = '';
 	my @chars = ('A' .. 'Z', 'a' .. 'z', '0' .. '9', '-', '_');
-	$result .= $chars[ int(rand(@chars))]; 
+	$result .= $chars[ int(rand(@chars))] for(1..16);
+	return $result;
+}
+
+# Creates a file
+sub create_file {
+	my $fname = generate_random_string();
+	open(my $f, '>', $fname);
+	say $f "Test File";
 }
