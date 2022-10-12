@@ -14,20 +14,187 @@ our $VERSION = '0.01';
 
 my %global;                           # Hash to contain all the key and value pairs
 my $file;                             # File handle to the file to parse
+my $filename;                         # Name of the file to parse
 my $current_section = "";
 
-my $varname = qr/[a-zA-Z_][a-zA-Z0-9_-]*/;
+
+my $varname = qr/[a-zA-Z][a-zA-Z0-9_-]*/;
+my $comment = qr/\s*#.*/;
 
 
-my $parser = sub {
-
-  while(<$file>) {
-    next if //
+# Subroutine that parses section names
+my $parse_section = sub {
+  if(/^--\s+($varname)\s+--\s*$/){
+    $current_section = $1;
+    return 1;
+  }
+  else {
+    return 0;
   }
 };
 
 
-# Pass a filename to this funtion to parse it
+# Subroutine to parse standard scalar assignment
+my $standard_scalar_assignment = sub {
+  # Matches
+  # x = my value
+  if(/^\s*($varname)\s+=\s+(\S.*)/) {
+    if($current_section) {
+      $global{$current_section . ".$1" } = $2;
+      return 1;
+    }
+    else{
+      $global{$1} = $2;
+      return 1;
+    }
+  }
+  else { return 0; }
+};
+
+
+# Subroutine to parse true quoted assignments. The true quotes are
+# The double quotes, apostrophe and backticks.
+my $true_quoted_scalar_assignment = sub {
+  # Matches
+  # x : "My value"
+  # or
+  # y : 'My value'
+  # or
+  # z : `My value`
+  if(/^\s* ($varname) \s+ : \s+ (["'`]) ([^\2]+) \2 /gcx) {
+    my $key = $1; my $val = $3;
+    # After quoted assignment, only comments or spaces may follow
+    unless(/\G \s+ $comment/gcx || /\G \s+ $/gcx){
+      pos($_) = 0;
+      die "Invalid config token in file $filename line $.\n";
+    }
+    pos($_) = 0;
+    if($current_section) {
+      $global{$current_section . ".$key"} = $val;
+      return 1;
+    }
+    else {
+      $global{$key} = $val;
+      return 1;
+    }
+  }
+  else {
+    pos($_) = 0;
+    return 0;
+  }
+};
+
+
+# Subroutine to parse bracket quoted assignments. The bracket quotes
+# are braces {}, square brackets [], parentheses (), and angular brackets <>
+my $bracket_quoted_scalar_assignment = sub {
+  # Matches
+  # x : {This uses braces}
+  # x : <This uses angles>
+  # x : (This uses parens)
+  # x : [This uses squares]
+  if(   /^\s* ($varname) \s+:\s+ \{ ([^}]+) \} /gcx   ||
+        /^\s* ($varname) \s+:\s+ \( ([^)]+) \) /gcx   ||
+        /^\s* ($varname) \s+:\s+ \[ ([^\]]+)\] /gcx   ||
+        /^\s* ($varname) \s+:\s+ < ([^>]+) > /gcx
+   )
+  {
+    my $key = $1; my $val = $2;
+    unless(/\G \s+ $comment/gcx || /\G \s+ $/gcx){
+      pos($_) = 0;
+      die "Invalid config token in file $filename line $.\n";
+    }
+    pos($_) = 0;
+    if($current_section) {
+      $global{$current_section . ".$key"} = $val;
+      return 1;
+    }
+    else {
+      $global{$key} = $val;
+      return 1;
+    }
+  }
+  else {
+    pos($_) = 0;
+    return 0;
+  }
+};
+
+
+# Subroutine to parse long value scalar assignment
+my $long_value_scalar_assignment = sub { 
+  if(/^\s* ($varname) \s+ < \s*$/gcx) {
+    my $key = $1;
+    my $line = <$file>;                  # Get the first line of the long value
+    $line =~ s/^\s*//;
+    chomp $line;
+    while(<$file>) {
+      last if /^\s*$/;
+      chomp;
+      s/^\s*/ /;
+      $line .= $_;
+    }
+    if($current_section) {
+      $global{$current_section . ".$key"} = $line;
+      return 1;
+    }
+    else {
+      $global{$key} = $line;
+      return 1;
+    }
+  }
+  else { 
+    pos($_) = 0;
+    return 0; 
+  }
+};
+
+
+# Subroutine to parse quoted scalar assignment
+my $quoted_scalar_assignment = sub {
+  return 1 if $true_quoted_scalar_assignment->();
+  return 1 if $bracket_quoted_scalar_assignment->();
+};
+
+
+# Subroutine to parse scalar assignments
+my $scalar_assignment = sub {
+  return 1 if $standard_scalar_assignment->();
+  return 1 if $quoted_scalar_assignment->();
+  return 1 if $long_value_scalar_assignment->();
+};
+
+
+# Subroutine that parses assignments
+my $assignment = sub {
+  return 1 if $scalar_assignment->();
+
+};
+
+
+# The main parsing subroutine
+my $parser = sub {
+  while(<$file>) {
+    next if /^$comment/;
+    next if /^$/;
+    next if $parse_section->();
+    next if $assignment->();
+  } 
+};
+
+
+
+=pod
+
+What follows is for testing and experimentation only and should be removed
+later
+
+=cut
+
+derml(shift @ARGV);
+
+
+# Pass a filename to this subroutine to parse it
 sub derml {
   my $len = scalar @_;
   if($len < 1) {
@@ -37,9 +204,17 @@ sub derml {
     croak "Too many parameters passed to derml";
   }
 
-  my $filename = shift;
+  $filename = shift;
   open($file, '<', $filename) or croak "Could not open $filename: $!";
   $parser->();
+
+  ######################################################
+  # TODO: Delete these lines after testing/development #
+  ######################################################
+  my @keys = keys %global;                             #
+  say "$_ = " . $global{$_} for(@keys);                #
+  ######################################################
+
   return \%global;
 }
 
