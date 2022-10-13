@@ -31,10 +31,17 @@ COPYRIGHT AND LICENCE
 
 Put the correct copyright and licence information here.
 
+<<<<<<< HEAD
 Copyright (C) 2022 by Deji Adegbite
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.30.3 or,
+=======
+Copyright (C) 2022 by A. U. Thor
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.26.1 or,
+>>>>>>> master
 at your option, any later version of Perl 5 you may have available.
 
 

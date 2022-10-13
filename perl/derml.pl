@@ -1,13 +1,17 @@
+#! /usr/bin/perl
 # A Perl Module for parsing derml
 
 use v5.26;												# Use perl version 5.26 and above
 
 my %global;												# All Key-Value pairs found go in here
 my $var_name_regex = qr{[a-zA-Z][A-Za-z0-9_-]+};		# Regex for key and section names
+my $current_section = "";
 
 # Read lines from files specified at the terminal
 while(<>) {
 	next if /^\s*#/;							# Ignore comments
+	next if /^\s*$/;							# Ignore blank lines
+	next if section_name();						# Get Section name
 	next if simple_key_value();					# Simple key = value
 	next if simple_key_value_with_quote();		# For Quoted key = 'value'
 	next if long_value_assignment();			# Check if assigning long value via '<'
@@ -17,8 +21,8 @@ while(<>) {
 }
 
 
-say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
-say $global{'key20'}[2];
+# say "KEY: $_ <=> VALUE: " . $global{$_} for(keys %global);
+say $global{'my-array'}[2];
 
 # Just a simple `key = value`. Nothing to see here
 sub simple_key_value {
@@ -59,7 +63,10 @@ sub simple_key_value_with_paren_quote {
 	# Check if quoted with parentheses
 	# Match:
 	# Key : (Value)
-	if(/^\s*($var_name_regex)\s+:\s+\(([^\)]+?)\)/) {
+	if(/^\s*($var_name_regex)\s+:\s+\(([^\)]+?)\)/gc) {
+		unless(/\G\s+#.*$/ || /\G\s*$/) {
+			die "Invalid config tokens on line $.\n";
+		}
 		$global{$1} = $2;
 		return 1;
 	}
@@ -243,6 +250,49 @@ sub get_rest_of_long_value {
 	}
 
 	return $tmp;
+}
+
+
+
+# Specifically for parsing arrays
+sub parse_array {
+	
+}
+
+
+# This is for multiline arrays
+sub multiline_array {
+	if(/^\s*($var_name_regex)\[\]\s*$/) {
+		my @array_items; my $item;
+		while($item = get_multiline_array_item()) {
+			say $item;
+		}
+		return 1
+	}
+}
+
+sub get_multiline_array_item {
+	my $line;
+	until(/^\s+=\s*$/) {
+		$_ = <>;
+		if(/^\s+=\s+(\S.*)$/) {
+			return $1
+		}
+		elsif(/^\s+<\s+(\S.*)$/) {
+			$line = $1;
+			until(/^\s*$/) {
+				$_ = <>;
+				if(/^\s+(\S.*)$/) {
+					$line .= " $1";
+					next;
+				}
+			}
+			return $line;
+		}
+		else {
+			return 0;
+		}
+	}
 }
 
 
@@ -530,6 +580,14 @@ sub single_line_space_separated_array {
 	}
 }
 
+
+sub section_name {
+	if(/^:(var_name_regex)\s*$/) {
+		$current_section = $1;
+		return 1;
+	}
+	return 0;
+}
 # TODO: Refactor into regexes for quoted items
 
 # TODO: Add POD documentation
