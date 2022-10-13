@@ -61,7 +61,7 @@ my $true_quoted_scalar_assignment = sub {
   # y : 'My value'
   # or
   # z : `My value`
-  if(/^\s* ($varname) \s+ : \s+ (["'`]) ([^\2]+) \2 /gcx) {
+  if(/^\s* ($varname) \s+ = \s+ (["'`]) ([^\2]+) \2 /gcx) {
     my $key = $1; my $val = $3;
     # After quoted assignment, only comments or spaces may follow
     unless(/\G \s+ $comment/gcx || /\G \s+ $/gcx){
@@ -93,10 +93,10 @@ my $bracket_quoted_scalar_assignment = sub {
   # x : <This uses angles>
   # x : (This uses parens)
   # x : [This uses squares]
-  if(   /^\s* ($varname) \s+:\s+ \{ ([^}]+) \} /gcx   ||
-        /^\s* ($varname) \s+:\s+ \( ([^)]+) \) /gcx   ||
-        /^\s* ($varname) \s+:\s+ \[ ([^\]]+)\] /gcx   ||
-        /^\s* ($varname) \s+:\s+ < ([^>]+) > /gcx
+  if(   /^\s* ($varname) \s+=\s+ \{ ([^}]+) \} /gcx   ||
+        /^\s* ($varname) \s+=\s+ \( ([^)]+) \) /gcx   ||
+        /^\s* ($varname) \s+=\s+ \[ ([^\]]+)\] /gcx   ||
+        /^\s* ($varname) \s+=\s+ < ([^>]+) > /gcx
    )
   {
     my $key = $1; my $val = $2;
@@ -122,7 +122,9 @@ my $bracket_quoted_scalar_assignment = sub {
 
 
 # Subroutine to parse long value scalar assignment
-my $long_value_scalar_assignment = sub { 
+my $long_value_scalar_assignment = sub {
+  # Matches assignment to long values.
+  # Note that long values are terminated with a blank line
   if(/^\s* ($varname) \s+ < \s*$/gcx) {
     my $key = $1;
     my $line = <$file>;                  # Get the first line of the long value
@@ -136,17 +138,37 @@ my $long_value_scalar_assignment = sub {
     }
     if($current_section) {
       $global{$current_section . ".$key"} = $line;
-      return 1;
     }
     else {
       $global{$key} = $line;
-      return 1;
     }
+    return 1;
   }
   else { 
-    pos($_) = 0;
     return 0; 
   }
+};
+
+
+# Subroutine to parse multiline scalar assignment
+my $multine_scalar_assignment = sub {
+  if(/^\s* ($varname) \s+\|\s+ (\S.*) $/gcx) {
+    my $key = $1; my $delim = $2; my $tmp = "";
+    while(<$file>) {
+      last if /^\s*$delim\s*$/;
+      $tmp .= $_ and next if /^\s*$/;
+      s/^\s*//;
+      $tmp .= $_;
+    }
+    if($current_section) {
+      $global{$current_section . ".$key"} = $tmp;
+    }
+    else {
+      $global{$key} = $tmp;
+    }
+    return 1;
+  }
+  else { return 0; }
 };
 
 
@@ -159,16 +181,17 @@ my $quoted_scalar_assignment = sub {
 
 # Subroutine to parse scalar assignments
 my $scalar_assignment = sub {
-  return 1 if $standard_scalar_assignment->();
   return 1 if $quoted_scalar_assignment->();
+  return 1 if $standard_scalar_assignment->();
   return 1 if $long_value_scalar_assignment->();
+  return 1 if $multine_scalar_assignment->();
 };
 
 
 # Subroutine that parses assignments
 my $assignment = sub {
   return 1 if $scalar_assignment->();
-
+  
 };
 
 
