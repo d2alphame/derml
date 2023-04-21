@@ -56,11 +56,11 @@ my $standard_scalar_assignment = sub {
 # The double quotes, apostrophe and backticks.
 my $true_quoted_scalar_assignment = sub {
   # Matches
-  # x : "My value"
+  # x = "My value"
   # or
-  # y : 'My value'
+  # y = 'My value'
   # or
-  # z : `My value`
+  # z = `My value`
   if(/^\s* ($varname) \s+ = \s+ (["'`]) ([^\2]+) \2 /gcx) {
     my $key = $1; my $val = $3;
     # After quoted assignment, only comments or spaces may follow
@@ -89,10 +89,10 @@ my $true_quoted_scalar_assignment = sub {
 # are braces {}, square brackets [], parentheses (), and angular brackets <>
 my $bracket_quoted_scalar_assignment = sub {
   # Matches
-  # x : {This uses braces}
-  # x : <This uses angles>
-  # x : (This uses parens)
-  # x : [This uses squares]
+  # x = {This uses braces}
+  # x = <This uses angles>
+  # x = (This uses parens)
+  # x = [This uses squares]
   if(   /^\s* ($varname) \s+=\s+ \{ ([^}]+) \} /gcx   ||
         /^\s* ($varname) \s+=\s+ \( ([^)]+) \) /gcx   ||
         /^\s* ($varname) \s+=\s+ \[ ([^\]]+)\] /gcx   ||
@@ -100,7 +100,7 @@ my $bracket_quoted_scalar_assignment = sub {
    )
   {
     my $key = $1; my $val = $2;
-    unless(/\G \s+ $comment/gcx || /\G \s+ $/gcx){
+    unless(/\G \s+ $comment/gcx || /\G \s* $/gcx){
       pos($_) = 0;
       die "Invalid config token in file $filename line $.\n";
     }
@@ -145,6 +145,7 @@ my $long_value_scalar_assignment = sub {
     return 1;
   }
   else { 
+    pos($_) = 0;
     return 0; 
   }
 };
@@ -155,20 +156,23 @@ my $multine_scalar_assignment = sub {
   if(/^\s* ($varname) \s+\|\s+ (\S.*) $/gcx) {
     my $key = $1; my $delim = $2; my $tmp = "";
     while(<$file>) {
-      last if /^\s*$delim\s*$/;
+      if(/^\s*$delim\s*$/) {
+        if($current_section) {
+          $global{$current_section . ".$key"} = $tmp;
+        }
+        else {
+          $global{$key} = $tmp;
+        }
+        return 1;
+      }
       $tmp .= $_ and next if /^\s*$/;
       s/^\s*//;
       $tmp .= $_;
     }
-    if($current_section) {
-      $global{$current_section . ".$key"} = $tmp;
-    }
-    else {
-      $global{$key} = $tmp;
-    }
-    return 1;
+    # If we ever get here, it means we didn't find the delimiter
+    die "End of file reached without finding delimiter: $delim\n";
   }
-  else { return 0; }
+  else { pos($_) = 0; return 0; }
 };
 
 
