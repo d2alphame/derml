@@ -94,8 +94,24 @@ my $true_quoted_array_assignment = sub {
 
 
 # For array assignments like array[] = first, second, third, fourth
-my $standard_single_line_array_assignment = sub {
-
+my $standard_array_assignment = sub {
+  my $key; my @temp;
+  if(/^ \s* ($varname)\[\] \s+ = \s+ ([^,]+) /gcx) {
+    push @temp, $2;
+    $key = $1;
+    while(/\G ,\s+ ([^,]+) /gcx) {
+      push @temp, $1
+    }
+    if($current_section) {
+      $global{"$current_section" . ".$key"} = [ @temp ]
+    }
+    else { $global{$key} = [ @temp ] }
+    return 1;
+  }
+  else {
+    pos($_) = 0;
+    return 0;
+  }
 };
 
 
@@ -137,12 +153,15 @@ my $quoted_array_assignment = sub {
 
 # For arrays specified on a single line
 my $single_line_array_assignment = sub {
-
+  return 1 if $quoted_array_assignment->();
+  return 1 if $standard_array_assignment->();
+  return 1 if $space_separated_array->();
+  return 0;
 };
 
 # For parsing arrays
 my $array_assignment = sub {
-  return 1 if $quoted_array_assignment->();
+  return 1 if $single_line_array_assignment->();
 };
 
 # Subroutine to parse standard scalar assignment
@@ -305,8 +324,9 @@ my $scalar_assignment = sub {
 
 # Subroutine that parses assignments
 my $assignment = sub {
-  return 1 if $scalar_assignment->();
   return 1 if $array_assignment->();
+  return 1 if $scalar_assignment->();
+  return 0;
 };
 
 
@@ -353,7 +373,7 @@ sub derml {
   say "$_ = " . $global{$_} for(@keys);                #
   ######################################################
 
-  say $global{"Single-line-arrays.double"}->[2];
+  say $global{"Single-line-arrays.standard"}->[3];
   return \%global;
 }
 
