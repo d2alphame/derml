@@ -41,7 +41,22 @@ my $multiline_array_assignment = sub {
     $key = $1;
     until(/^\s+=\s*$/) {
       $_ = <$file>;
+
+      # For normal array elements. Starts with =
       if(/^\s+ = \s+ (\S.*)$/gcx) { push @temp, $1 ; next }
+      
+      # For multi line array elements. starts with |
+      if(/^\s+ \| \s+ (\S.*)$/gcx) {
+        my $delim = $1; my $line = "";
+        $_ = <$file>;
+        until(/^\s+ $delim \s* $/gcx) {
+          s/^\s*//;
+          $line .= $_;
+          $_ = <$file>;
+        }
+        push @temp, $line;
+        next
+      }
     }
     if($current_section) {
       $global{"$current_section" . ".$key"} = [ @temp ]
@@ -380,7 +395,7 @@ sub derml {
   say "$_ = " . $global{$_} for(@keys);                #
   ######################################################
 
-  say $global{"Multi-line-array.multi"}->[0];
+  say $global{"Multi-line-array.multi"}->[3];
   return \%global;
 }
 
