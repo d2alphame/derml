@@ -36,17 +36,27 @@ my $parse_section = sub {
 
 # Arrays across multiple lines
 my $multiline_array_assignment = sub {
-
+  my $key; my @temp;
+  if(/^\s* ($varname)\[\] \s* $/gcx) {
+    $key = $1;
+    until(/^\s+=\s*$/) {
+      $_ = <$file>;
+      if(/^\s+ = \s+ (\S.*)$/gcx) { push @temp, $1 ; next }
+    }
+    if($current_section) {
+      $global{"$current_section" . ".$key"} = [ @temp ]
+    }
+    else { $global{$key} = [ @temp ] }
+    return 1;
+  }
+  else {
+    pos($_) = 0;
+    return 0;
+  }
 };
 
 
-# Array elements quoted with braces
-my $brace_quoted_array_assignment = sub {
-
-};
-
-
-# For arrays where element is separated by spaces
+# For arrays where elements are separated by spaces
 my $space_separated_array = sub {
   my $key;
   if(s/^\s*\@//) {
@@ -158,6 +168,7 @@ my $single_line_array_assignment = sub {
 # For parsing arrays
 my $array_assignment = sub {
   return 1 if $single_line_array_assignment->();
+  return 1 if $multiline_array_assignment->();
 };
 
 # Subroutine to parse standard scalar assignment
@@ -369,7 +380,7 @@ sub derml {
   say "$_ = " . $global{$_} for(@keys);                #
   ######################################################
 
-  say $global{"Single-line-arrays.space"}->[1];
+  say $global{"Multi-line-array.multi"}->[0];
   return \%global;
 }
 
