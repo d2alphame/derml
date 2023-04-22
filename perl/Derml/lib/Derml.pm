@@ -34,6 +34,92 @@ my $parse_section = sub {
 };
 
 
+# Arrays across multiple lines
+my $multiline_array_assignment = sub {
+
+};
+
+
+# Array elements quoted with braces
+my $brace_quoted_array_assignment = sub {
+
+};
+
+
+# For arrays where element is separated by spaces
+my $space_separated_arrays = sub {
+
+};
+
+
+# For arrays quoted with ", ', and `
+my $true_quoted_array_assignment = sub {
+
+};
+
+
+# For arrays quoted with {}, <>, (), and []
+# my $bracket_quoted_array_assignment = sub {
+#   my $res = 0;
+#   if(/^(?= \s* $varname\[\] \s+ = \s+ \{)/) { $res = $brace_quoted_array_assignment->() }
+#   if(/^(?= \s* $varname\[\] \s+ = \s+ \()/) { $res = $brace_quoted_array_assignment->() }
+#   if(/^(?= \s* $varname\[\] \s+ = \s+ \[)/) { $res = $brace_quoted_array_assignment->() }
+#   if(/^(?= \s* $varname\[\] \s+ = \s+ <)/) { $res = $brace_quoted_array_assignment->() }
+#   return $res;
+# };
+# 
+
+# For array assignments like array[] = first, second, third, fourth
+my $standard_single_line_array_assignment = sub {
+
+};
+
+
+# For quoted array assignments
+my $quoted_single_line_array_assignment = sub {
+  my ($open, $close) = @_;
+  my @temp; my $key;
+  if(/^ \s* ($varname)\[\] \s+ = \s+ $open([^$close]+?)$close /gcx) {
+    push @temp, $2;
+    $key = $1;
+    while(/\G \s+ $open([^$close]+)$close/gcx) {
+      push @temp, $1;
+    }
+    unless( /\G \s* $comment $/gcx  ||  /\G \s* $/gcx) {
+      pos($_) = 0;
+      return 0;
+    }
+    if($current_section) {
+      $global{"$current_section" . ".$key"} = [ @temp ]
+    }
+    else { $global{$key} = [ @temp ] }
+    return 1;
+  }
+  else {
+    pos($_) = 0;
+    return 0;
+  }
+};
+
+
+my $quoted_array_assignment = sub {
+  return 1 if($quoted_single_line_array_assignment->("{", "}"));
+  return 1 if($quoted_single_line_array_assignment->('\(', '\)'));
+  return 1 if($quoted_single_line_array_assignment->("<", ">"));
+  return 1 if($quoted_single_line_array_assignment->('\[', '\]'));
+  return 0;
+};
+
+# For arrays specified on a single line
+my $single_line_array_assignment = sub {
+
+};
+
+# For parsing arrays
+my $array_assignment = sub {
+  return 1 if $quoted_array_assignment->();
+};
+
 # Subroutine to parse standard scalar assignment
 my $standard_scalar_assignment = sub {
   # Matches
@@ -195,7 +281,7 @@ my $scalar_assignment = sub {
 # Subroutine that parses assignments
 my $assignment = sub {
   return 1 if $scalar_assignment->();
-  
+  return 1 if $array_assignment->();
 };
 
 
@@ -242,6 +328,7 @@ sub derml {
   say "$_ = " . $global{$_} for(@keys);                #
   ######################################################
 
+  say $global{"Single-line-arrays.paren"}->[3];
   return \%global;
 }
 
