@@ -47,24 +47,20 @@ my $brace_quoted_array_assignment = sub {
 
 
 # For arrays where element is separated by spaces
-my $space_separated_arrays = sub {
-
+my $space_separated_array = sub {
+  my $key;
+  if(s/^\s*\@//) {
+    chomp;
+    my @temp = split /\s+/, $_;
+    $key = shift @temp;
+    if($current_section) {
+      $global{"$current_section" . ".$key" } = [ @temp ]
+    }
+    else {
+      $global{$key} = [ @temp ]
+    }
+  }
 };
-
-
-# For arrays quoted with ", ', and `
-
-
-# For arrays quoted with {}, <>, (), and []
-# my $bracket_quoted_array_assignment = sub {
-#   my $res = 0;
-#   if(/^(?= \s* $varname\[\] \s+ = \s+ \{)/) { $res = $brace_quoted_array_assignment->() }
-#   if(/^(?= \s* $varname\[\] \s+ = \s+ \()/) { $res = $brace_quoted_array_assignment->() }
-#   if(/^(?= \s* $varname\[\] \s+ = \s+ \[)/) { $res = $brace_quoted_array_assignment->() }
-#   if(/^(?= \s* $varname\[\] \s+ = \s+ <)/) { $res = $brace_quoted_array_assignment->() }
-#   return $res;
-# };
-# 
 
 
 # For arrays where elements are quoted with ", ', or `
@@ -373,7 +369,7 @@ sub derml {
   say "$_ = " . $global{$_} for(@keys);                #
   ######################################################
 
-  say $global{"Single-line-arrays.standard"}->[3];
+  say $global{"Single-line-arrays.space"}->[1];
   return \%global;
 }
 
