@@ -53,9 +53,6 @@ my $space_separated_arrays = sub {
 
 
 # For arrays quoted with ", ', and `
-my $true_quoted_array_assignment = sub {
-
-};
 
 
 # For arrays quoted with {}, <>, (), and []
@@ -69,14 +66,41 @@ my $true_quoted_array_assignment = sub {
 # };
 # 
 
+
+# For arrays where elements are quoted with ", ', or `
+my $true_quoted_array_assignment = sub {
+  my @temp; my $key;
+  if(/^\s* ($varname)\[\] \s+ = \s+ (["'`]) ([^\2]+?) \2 /gcx) {
+    push @temp, $3;
+    $key = $1;
+    while(/\G \s*, \s+ (["'`]) ([^\1]+?) \1 /gcx) {
+      push @temp, $2;
+    }
+    unless( /\G \s* $comment $/gcx  ||  /\G \s* $/gcx) {
+      pos($_) = 0;
+      return 0;
+    }
+    if($current_section) {
+      $global{"$current_section" . ".$key"} = [ @temp ]
+    }
+    else { $global{$key} = [ @temp ] }
+    return 1;
+  }
+  else {
+    pos($_) = 0;
+    return 0;
+  }
+};
+
+
 # For array assignments like array[] = first, second, third, fourth
 my $standard_single_line_array_assignment = sub {
 
 };
 
 
-# For quoted array assignments
-my $quoted_single_line_array_assignment = sub {
+# For bracket-quoted array assignments
+my $bracket_quoted_array_assignment = sub {
   my ($open, $close) = @_;
   my @temp; my $key;
   if(/^ \s* ($varname)\[\] \s+ = \s+ $open([^$close]+?)$close /gcx) {
@@ -103,10 +127,11 @@ my $quoted_single_line_array_assignment = sub {
 
 
 my $quoted_array_assignment = sub {
-  return 1 if($quoted_single_line_array_assignment->("{", "}"));
-  return 1 if($quoted_single_line_array_assignment->('\(', '\)'));
-  return 1 if($quoted_single_line_array_assignment->("<", ">"));
-  return 1 if($quoted_single_line_array_assignment->('\[', '\]'));
+  return 1 if($bracket_quoted_array_assignment->("{", "}"));
+  return 1 if($bracket_quoted_array_assignment->('\(', '\)'));
+  return 1 if($bracket_quoted_array_assignment->("<", ">"));
+  return 1 if($bracket_quoted_array_assignment->('\[', '\]'));
+  return 1 if($true_quoted_array_assignment->());
   return 0;
 };
 
@@ -328,7 +353,7 @@ sub derml {
   say "$_ = " . $global{$_} for(@keys);                #
   ######################################################
 
-  say $global{"Single-line-arrays.paren"}->[3];
+  say $global{"Single-line-arrays.double"}->[2];
   return \%global;
 }
 
