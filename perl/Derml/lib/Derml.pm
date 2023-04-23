@@ -24,7 +24,7 @@ my $comment = qr/\s*#.*/;
 
 # Subroutine that parses section names
 my $parse_section = sub {
-  if(/^--\s+($varname)\s+--\s*$/){
+  if(/^\s*--\s+($varname)\s+--\s*$/){
     $current_section = $1;
     return 1;
   }
