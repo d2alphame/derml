@@ -15,8 +15,8 @@ our $VERSION = '0.01';
 my %global;                           # Hash to contain all the key and value pairs
 my $file;                             # File handle to the file to parse
 my $filename;                         # Name of the file to parse
+my $percent_callback;                 # Code to run when a percent string or block is encountered
 my $current_section = "";
-
 
 my $varname = qr/[a-zA-Z][a-zA-Z0-9_-]*/;
 my $comment = qr/\s*#.*/;
@@ -31,6 +31,26 @@ my $parse_section = sub {
   else {
     return 0;
   }
+};
+
+
+# This is for percent strings and percent blocks
+my $percent_entities = sub {
+  if(/^\s* % \s+ (\S.*) $/x){
+    $percent_callback->($1) if($percent_callback);
+    return 1;
+  }
+  elsif(/^\s* %% \s* $/x){
+    my $line = <$file>;
+    my $temp = "";
+    until(/^\s* %% \s* $/x) {
+      $temp .= $_;
+      $line = <$file>;
+    }
+    $percent_callback->($temp) if($percent_callback);
+    return 1;
+  }
+  else { return 0; }
 };
 
 
@@ -106,7 +126,9 @@ my $space_separated_array = sub {
     else {
       $global{$key} = [ @temp ]
     }
+    return 1;
   }
+  else { return 0; }
 };
 
 
@@ -206,6 +228,7 @@ my $single_line_array_assignment = sub {
 my $array_assignment = sub {
   return 1 if $single_line_array_assignment->();
   return 1 if $multiline_array_assignment->();
+  return 0;
 };
 
 # Subroutine to parse standard scalar assignment
@@ -354,6 +377,7 @@ my $multine_scalar_assignment = sub {
 my $quoted_scalar_assignment = sub {
   return 1 if $true_quoted_scalar_assignment->();
   return 1 if $bracket_quoted_scalar_assignment->();
+  return 0;
 };
 
 
@@ -363,6 +387,7 @@ my $scalar_assignment = sub {
   return 1 if $standard_scalar_assignment->();
   return 1 if $long_value_scalar_assignment->();
   return 1 if $multine_scalar_assignment->();
+  return 0;
 };
 
 
@@ -381,6 +406,8 @@ my $parser = sub {
     next if /^$/;
     next if $parse_section->();
     next if $assignment->();
+    next if $percent_entities->();
+    # die "Unrecognized key or value: $.\n";
   } 
 };
 
@@ -402,11 +429,12 @@ sub derml {
   if($len < 1) {
     croak "Pass the name of the file to parse to derml";
   }
-  elsif($len > 1) {
+  elsif($len > 2) {
     croak "Too many parameters passed to derml";
   }
 
   $filename = shift;
+  $percent_callback = shift;
   open($file, '<', $filename) or croak "Could not open $filename: $!";
   $parser->();
 
