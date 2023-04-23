@@ -412,7 +412,7 @@ my $parser = sub {
     next if $parse_section->();
     next if $assignment->();
     next if $percent_entities->();
-    die "Unrecognized key or value: $.\n";
+    die "Unrecognized key or value in file $filename, line $.\n";
   } 
 };
 
