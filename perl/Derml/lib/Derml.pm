@@ -216,6 +216,7 @@ my $quoted_array_assignment = sub {
   return 0;
 };
 
+
 # For arrays specified on a single line
 my $single_line_array_assignment = sub {
   return 1 if $quoted_array_assignment->();
@@ -224,12 +225,14 @@ my $single_line_array_assignment = sub {
   return 0;
 };
 
+
 # For parsing arrays
 my $array_assignment = sub {
   return 1 if $single_line_array_assignment->();
   return 1 if $multiline_array_assignment->();
   return 0;
 };
+
 
 # Subroutine to parse standard scalar assignment
 my $standard_scalar_assignment = sub {
@@ -410,7 +413,6 @@ my $parser = sub {
     # die "Unrecognized key or value: $.\n";
   } 
 };
-
 
 
 =pod
