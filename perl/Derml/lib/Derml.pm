@@ -207,6 +207,7 @@ my $bracket_quoted_array_assignment = sub {
 };
 
 
+# For quoted array elements
 my $quoted_array_assignment = sub {
   return 1 if($bracket_quoted_array_assignment->("{", "}"));
   return 1 if($bracket_quoted_array_assignment->('\(', '\)'));
@@ -357,6 +358,7 @@ my $multine_scalar_assignment = sub {
     my $key = $1; my $delim = $2; my $tmp = "";
     while(<$file>) {
       if(/^\s*$delim\s*$/) {
+        chomp $tmp;
         if($current_section) {
           $global{$current_section . ".$key"} = $tmp;
         }
