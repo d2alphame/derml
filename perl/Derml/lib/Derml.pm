@@ -407,7 +407,6 @@ my $assignment = sub {
 # The main parsing subroutine
 my $parser = sub {
   while(<$file>) {
-    say;
     next if /^$comment/;
     next if /^$/;
     next if $parse_section->();
