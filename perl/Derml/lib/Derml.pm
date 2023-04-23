@@ -348,7 +348,7 @@ my $long_value_scalar_assignment = sub {
       $line .= $_;
     }
     # If we get here, then the delimiting blank line was not found
-    die "Delimiting blank line for long value not found";
+    die "Delimiting blank line for long value not found\n";
   }
   else { 
     pos($_) = 0;
