@@ -41,11 +41,11 @@ my $percent_entities = sub {
     return 1;
   }
   elsif(/^\s* %% \s* $/x){
-    my $line = <$file>;
+    $_ = <$file>;
     my $temp = "";
     until(/^\s* %% \s* $/x) {
       $temp .= $_;
-      $line = <$file>;
+      $_ = <$file>;
     }
     $percent_callback->($temp) if($percent_callback);
     return 1;
@@ -407,12 +407,13 @@ my $assignment = sub {
 # The main parsing subroutine
 my $parser = sub {
   while(<$file>) {
+    say;
     next if /^$comment/;
     next if /^$/;
     next if $parse_section->();
     next if $assignment->();
     next if $percent_entities->();
-    # die "Unrecognized key or value: $.\n";
+    die "Unrecognized key or value: $.\n";
   } 
 };
 
