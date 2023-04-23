@@ -42,6 +42,9 @@ my $multiline_array_assignment = sub {
     until(/^\s+=\s*$/) {
       $_ = <$file>;
 
+      # Ignore blank lines here
+      next if(/^\s*$/);
+
       # For normal array elements. Starts with =
       if(/^\s+ = \s+ (\S.*)$/gcx) { push @temp, $1 ; next }
       
