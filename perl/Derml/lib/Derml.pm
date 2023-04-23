@@ -45,7 +45,7 @@ my $multiline_array_assignment = sub {
       # For normal array elements. Starts with =
       if(/^\s+ = \s+ (\S.*)$/gcx) { push @temp, $1 ; next }
       
-      # For multi line array elements. starts with |
+      # For multi line array elements. Starts with |
       if(/^\s+ \| \s+ (\S.*)$/gcx) {
         my $delim = $1; my $line = "";
         $_ = <$file>;
@@ -57,6 +57,25 @@ my $multiline_array_assignment = sub {
         push @temp, $line;
         next
       }
+
+      # For long value array elements. Starts with <
+      if(/^\s+ < \s+ (\S.*) $/gcx) {
+        my $longvalue = $1;
+        $_ = <$file>;
+        until(/^\s*$/) {
+          chomp;
+          s/^\s*/ /;
+          $longvalue .= $_;
+          $_ = <$file>;
+        }
+        push @temp, $longvalue;
+        next
+      }
+
+      last if(/^\s+=\s*/);
+      
+      # If we ever get here it means the multi line array delimiter wasn't found
+      die "Multi-line array delimiter never found\n";
     }
     if($current_section) {
       $global{"$current_section" . ".$key"} = [ @temp ]
@@ -395,7 +414,7 @@ sub derml {
   say "$_ = " . $global{$_} for(@keys);                #
   ######################################################
 
-  say $global{"Multi-line-array.multi"}->[3];
+  say $global{"Multi-line-array.multi"}->[4];
   return \%global;
 }
 
