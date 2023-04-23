@@ -41,14 +41,16 @@ my $percent_entities = sub {
     return 1;
   }
   elsif(/^\s* %% \s* $/x){
-    $_ = <$file>;
     my $temp = "";
-    until(/^\s* %% \s* $/x) {
+    while(<$file>) {
+      if(/^\s* %% \s* $/x) {
+        $percent_callback->($temp) if($percent_callback);
+        return 1;
+      }
       $temp .= $_;
-      $_ = <$file>;
     }
-    $percent_callback->($temp) if($percent_callback);
-    return 1;
+    # Getting here means closing delimiter for percent block is absent
+    die "Closing delimiter of percent block never found\n";
   }
   else { return 0; }
 };
