@@ -328,6 +328,7 @@ my $bracket_quoted_scalar_assignment = sub {
 my $long_value_scalar_assignment = sub {
   # Matches assignment to long values.
   # Note that long values are terminated with a blank line
+  my $lineno = $.;
   if(/^\s* ($varname) \s+ < \s*$/gcx) {
     my $key = $1;
     my $line = <$file>;                  # Get the first line of the long value
@@ -348,7 +349,7 @@ my $long_value_scalar_assignment = sub {
       $line .= $_;
     }
     # If we get here, then the delimiting blank line was not found
-    die "Delimiting blank line for long value not found\n";
+    die "Delimiting blank line for long value not found in file $filename line $lineno\n";
   }
   else { 
     pos($_) = 0;
