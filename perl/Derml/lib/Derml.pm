@@ -59,10 +59,10 @@ my $percent_entities = sub {
 
 # Arrays across multiple lines
 my $multiline_array_assignment = sub {
-  my $key; my @temp;
+  my $key; my @temp; my $lineno;
   if(/^\s* ($varname)\[\] \s* $/gcx) {
-    $key = $1;
-    until(/^\s+=\s*$/) {
+    $key = $1; $lineno = $.;
+    READLINES: until(/^\s+=\s*$/) {
       $_ = <$file>;
 
       # Ignore blank lines here
@@ -73,35 +73,39 @@ my $multiline_array_assignment = sub {
       
       # For multi line array elements. Starts with |
       if(/^\s+ \| \s+ (\S.*)$/gcx) {
+        $lineno = $.;
         my $delim = $1; my $line = "";
-        $_ = <$file>;
-        until(/^\s+ $delim \s* $/gcx) {
+        while(<$file>) {
+          if(/^\s+ $delim \s* $/gcx) {
+            push @temp, $line;
+            next READLINES;
+          }
           s/^\s*//;
           $line .= $_;
-          $_ = <$file>;
         }
-        push @temp, $line;
-        next
+        die "Delimiter $delim not found for multiline array element in file $filename, line $lineno\n";
       }
 
       # For long value array elements. Starts with <
       if(/^\s+ < \s+ (\S.*) $/gcx) {
+        $lineno = $.;
         my $longvalue = $1;
-        $_ = <$file>;
-        until(/^\s*$/) {
+        while(<$file>) {
+          if(/^\s*$/) {
+            push @temp, $longvalue;
+            next READLINES;
+          }
           chomp;
           s/^\s*/ /;
           $longvalue .= $_;
-          $_ = <$file>;
         }
-        push @temp, $longvalue;
-        next
+        die "Delimiting blank line not for long value element in array in file $filename, line $lineno\n";
       }
 
       last if(/^\s+=\s*/);
       
       # If we ever get here it means the multi line array delimiter wasn't found
-      die "Multi-line array delimiter never found\n";
+      die "Delimiting lone '=' on a blank line not found for multiline array in file $filename, line $lineno\n";
     }
     if($current_section) {
       $global{"$current_section" . ".$key"} = [ @temp ]
@@ -268,7 +272,7 @@ my $true_quoted_scalar_assignment = sub {
     # After quoted assignment, only comments or spaces may follow
     unless(/\G \s+ $comment/gcx || /\G \s+ $/gcx){
       pos($_) = 0;
-      die "Invalid config token in file $filename line $.\n";
+      die "Invalid config token in file $filename, line $.\n";
     }
     pos($_) = 0;
     if($current_section) {
@@ -304,7 +308,7 @@ my $bracket_quoted_scalar_assignment = sub {
     my $key = $1; my $val = $2;
     unless(/\G \s+ $comment/gcx || /\G \s* $/gcx){
       pos($_) = 0;
-      die "Invalid config token in file $filename line $.\n";
+      die "Invalid config token in file $filename, line $.\n";
     }
     pos($_) = 0;
     if($current_section) {
@@ -378,7 +382,7 @@ my $multine_scalar_assignment = sub {
       $tmp .= $_;
     }
     # If we ever get here, it means we didn't find the delimiter
-    die "Delimiter $delim not found for multiline value in file $filename, line $lineno\n";
+    die "Delimiter $delim for multiline value not found in file $filename, line $lineno\n";
   }
   else { pos($_) = 0; return 0; }
 };
@@ -418,7 +422,7 @@ my $parser = sub {
     next if $parse_section->();
     next if $assignment->();
     next if $percent_entities->();
-    die "Unrecognized key or value in file $filename, line $.\n";
+    die "Invalid config token in file $filename, line $.\n";
   } 
 };
 
