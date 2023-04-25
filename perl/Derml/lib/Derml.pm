@@ -467,7 +467,7 @@ sub derml {
 
 
 # Returns error from the parse
-sub ERROR {
+sub ERROR() {
   return $error;
 }
 
