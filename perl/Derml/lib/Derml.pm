@@ -17,6 +17,7 @@ my $file;                             # File handle to the file to parse
 my $filename;                         # Name of the file to parse
 my $percent_callback;                 # Code to run when a percent string or block is encountered
 my $current_section = "";
+my $error = ""; 
 
 my $varname = qr/[a-zA-Z][a-zA-Z0-9_-]*/;
 my $comment = qr/\s*#.*/;
@@ -457,7 +458,9 @@ sub derml {
     return 1;
   } and return %global;
 
-  $error_handler->() if($error_handler);
+  $error = $@;
+  $error_handler->($error) if($error_handler);
+  return ();        # Return an empty list if the parse failed
 
 }
 
