@@ -41,6 +41,7 @@ my $percent_entities = sub {
     return 1;
   }
   elsif(/^\s* %% \s* $/x){
+    my $lineno = $.;
     my $temp = "";
     while(<$file>) {
       if(/^\s* %% \s* $/x) {
@@ -50,7 +51,7 @@ my $percent_entities = sub {
       $temp .= $_;
     }
     # Getting here means closing delimiter for percent block is absent
-    die "Closing delimiter of percent block never found\n";
+    die "Delimiter for percent block not found in file $filename, line $lineno\n";
   }
   else { return 0; }
 };
@@ -144,8 +145,7 @@ my $true_quoted_array_assignment = sub {
       push @temp, $2;
     }
     unless( /\G \s* $comment $/gcx  ||  /\G \s* $/gcx) {
-      pos($_) = 0;
-      return 0;
+      die "Invalid config token in file $filename, line $.\n ";
     }
     if($current_section) {
       $global{"$current_section" . ".$key"} = [ @temp ]
@@ -193,8 +193,7 @@ my $bracket_quoted_array_assignment = sub {
       push @temp, $1;
     }
     unless( /\G \s* $comment $/gcx  ||  /\G \s* $/gcx) {
-      pos($_) = 0;
-      return 0;
+      die "Invalid config token in file $filename, line $.\n";
     }
     if($current_section) {
       $global{"$current_section" . ".$key"} = [ @temp ]
@@ -349,7 +348,7 @@ my $long_value_scalar_assignment = sub {
       $line .= $_;
     }
     # If we get here, then the delimiting blank line was not found
-    die "Delimiting blank line for long value not found in file $filename line $lineno\n";
+    die "Delimiting blank line for long value not found in file $filename, line $lineno\n";
   }
   else { 
     pos($_) = 0;
@@ -361,6 +360,7 @@ my $long_value_scalar_assignment = sub {
 # Subroutine to parse multiline scalar assignment
 my $multine_scalar_assignment = sub {
   if(/^\s* ($varname) \s+\|\s+ (\S.*) $/gcx) {
+    my $lineno = $.;
     my $key = $1; my $delim = $2; my $tmp = "";
     while(<$file>) {
       if(/^\s*$delim\s*$/) {
@@ -378,7 +378,7 @@ my $multine_scalar_assignment = sub {
       $tmp .= $_;
     }
     # If we ever get here, it means we didn't find the delimiter
-    die "End of file reached without finding delimiter: $delim\n";
+    die "Delimiter $delim not found for multiline value in file $filename, line $lineno\n";
   }
   else { pos($_) = 0; return 0; }
 };
