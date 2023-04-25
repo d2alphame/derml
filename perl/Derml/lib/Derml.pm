@@ -62,8 +62,8 @@ my $multiline_array_assignment = sub {
   my $key; my @temp; my $lineno;
   if(/^\s* ($varname)\[\] \s* $/gcx) {
     $key = $1;
+    my $array_line = $.;
     READLINES: until(/^\s+=\s*$/) {
-      $lineno = $.;
       $_ = <$file>;
 
       # Ignore blank lines here
@@ -106,7 +106,7 @@ my $multiline_array_assignment = sub {
       last if(/^\s+=\s*/);
       
       # If we ever get here it means the multi line array delimiter wasn't found
-      die "Delimiting lone '=' on a blank line not found for multiline array in file $filename, line $lineno\n";
+      die "Delimiting lone '=' on a blank line not found for multiline array in file $filename, line $array_line\n";
     }
     if($current_section) {
       $global{"$current_section" . ".$key"} = [ @temp ]
