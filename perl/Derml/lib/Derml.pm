@@ -61,8 +61,9 @@ my $percent_entities = sub {
 my $multiline_array_assignment = sub {
   my $key; my @temp; my $lineno;
   if(/^\s* ($varname)\[\] \s* $/gcx) {
-    $key = $1; $lineno = $.;
+    $key = $1;
     READLINES: until(/^\s+=\s*$/) {
+      $lineno = $.;
       $_ = <$file>;
 
       # Ignore blank lines here
