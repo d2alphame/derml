@@ -436,7 +436,7 @@ later
 
 =cut
 
-derml(shift @ARGV);
+# derml(shift @ARGV);
 
 
 # Pass a filename to this subroutine to parse it
