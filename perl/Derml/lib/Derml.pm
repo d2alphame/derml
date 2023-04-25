@@ -22,6 +22,7 @@ my $error = "";
 my $varname = qr/[a-zA-Z][a-zA-Z0-9_-]*/;
 my $comment = qr/\s*#.*/;
 
+sub ERROR();
 
 # Subroutine that parses section names
 my $parse_section = sub {
@@ -445,7 +446,7 @@ sub derml {
   if($len < 1) {
     croak "Pass the name of the file to parse to derml";
   }
-  elsif($len > 3   ) {
+  elsif($len > 3) {
     croak "Too many parameters passed to derml";
   }
 
