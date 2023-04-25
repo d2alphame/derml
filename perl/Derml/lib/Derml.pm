@@ -455,17 +455,20 @@ sub derml {
   eval { 
     $parser->();
     return 1;
-  } or {
-    $error_handler->() if($error_handler);
-    return ();
-  };
+  } and return %global;
 
-  return %global;
+  $error_handler->() if($error_handler);
 
 }
 
 
+# Returns error from the parse
+sub ERROR {
+
+}
+
 1;
+
 __END__
 # Below is stub documentation for your module. You'd better edit it!
 
