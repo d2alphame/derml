@@ -444,14 +444,25 @@ sub derml {
   if($len < 1) {
     croak "Pass the name of the file to parse to derml";
   }
-  elsif($len > 2) {
+  elsif($len > 3   ) {
     croak "Too many parameters passed to derml";
   }
 
   $filename = shift;
   $percent_callback = shift;
+  my $error_handler = shift;
   open($file, '<', $filename) or croak "Could not open $filename: $!";
-  $parser->();
+  eval { 
+    $parser->();
+    return 1;
+  } or {
+    $error_handler->() if($error_handler);
+    return 0;
+  };
+
+  return 1;
+
+
 
   ######################################################
   # TODO: Delete these lines after testing/development #
