@@ -457,22 +457,11 @@ sub derml {
     return 1;
   } or {
     $error_handler->() if($error_handler);
-    return 0;
+    return ();
   };
 
-  return 1;
+  return %global;
 
-
-
-  ######################################################
-  # TODO: Delete these lines after testing/development #
-  ######################################################
-  my @keys = keys %global;                             #
-  say "$_ = " . $global{$_} for(@keys);                #
-  ######################################################
-
-  say $global{"Multi-line-array.multi"}->[4];
-  return \%global;
 }
 
 
