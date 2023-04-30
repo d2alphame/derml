@@ -10,7 +10,7 @@ use warnings;
 
 #use Test::More tests => last_test_to_print;
 use Test::More;
-use Test::Exception;
+# use Test::Exception;
 BEGIN { use_ok('Derml') };
 
 #########################
