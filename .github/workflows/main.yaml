@@ -12,7 +12,7 @@ jobs:
       -
         name: Run unit tests
         run: |
-          cpan Test::Exception --force
+          sudo cpan Test::Exception --force
           cd perl/Derml
           perl Makefile.PL
           make test
