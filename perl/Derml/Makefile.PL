@@ -8,7 +8,7 @@ WriteMakefile(
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
     ABSTRACT_FROM     => 'lib/Derml.pm', # retrieve abstract from module
     AUTHOR            => 'Deji Adegbite <contact@dejiadegbite.com.com>',
-    TEST_REQUIRES     => { Test::Exception => 0.43 }
+    TEST_REQUIRES     => { 'Test::Exception' => 0.43 }
     #LICENSE           => 'perl',
     #Value must be from legacy list of licenses here
     #https://metacpan.org/pod/Module::Build::API
