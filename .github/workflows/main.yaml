@@ -1,0 +1,18 @@
+name: Build and test Derml
+on:
+  push:
+    branches: [devel]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout the code
+        uses: actions/checkout@v3
+      -
+        name: Run unit tests
+        run: |
+          cpan Test::Exception
+          cd perl/Derml
+          perl Makefile.PL
+          make test
