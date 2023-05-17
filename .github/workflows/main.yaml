@@ -12,7 +12,6 @@ jobs:
       -
         name: Run unit tests
         run: |
-          cpan Test::Exception
           cd perl/Derml
           perl Makefile.PL
           make test
