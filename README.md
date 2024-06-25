@@ -18,15 +18,7 @@ Keys may be any combination of alphabets, numbers, dashes or underscores and may
 Note the whitespace around the equals (=) sign. They are compulsory and **must** be added.
 Also note that keys are case-sensitive. So `mykey` is different from `Mykey` which is different from `MyKey`, etc.
 
-Used in the above form, the value starts from the first non-whitespace character after the '=' sign up to the end of the line
-
-To use quoted values instead, use the colon (:) in place of the equals sign. The values may then be quoted with single-quotes ('), double-quotes ("), backticks (`), parentheses (()), braces({}), square-brackets ([]), or angular brackets(<>). A comment
-can be added after the quoted value
-```
-	key : (This is the value) 	# Using parentheses as the quote
-	a_second_key : 'This uses single-quotes'	# Comments may be added
-	angle-quote : <This value uses angular brackets as the quotes>
-```
+Used in the above form, the value starts from the first non-whitespace character after the '=' sign up to the end of the line.
 
 ### Values
 Values begin from the first non-whitespace character after the equal sign up to the end of the line.
@@ -34,10 +26,21 @@ Values begin from the first non-whitespace character after the equal sign up to 
 	intro = My name is Deji Adegbite
 ```
 In the above example, the value begins from the letter 'M' up to the last character on that line.  
-In the case of quoted values, The values will be within the selected quotes. For example
+More simple examples:
 ```
-	executables_dir : {C:/Program Files}	# Quoted with braces
-	use_double_quotes : "E familia"			# Quoted with double-quotes
+	Avatar = Aang
+	City = Ba Sing Se
+	sacred_artifact = Sokka's boomerang
+```
+
+#### Quoting Values
+Values may be quoted. There are 7 quoting mechanisms available - these are single-quotes ('), double-quotes ("), backticks (`), parentheses (()), braces({}),square-brackets ([]), or angular brackets(<>). A comment can be added after the quoted value.
+```
+	key = (This is the value) 	# Using parentheses as the quote
+	a_second_key = 'This uses single-quotes'	# Comments may be added after quoted value
+	angle-quote = <This value uses angular brackets as the quotes>
+	dbl-quote = "Double quote"
+	windows_path = {C:\Program Files}		# Uses braces to quote the value 
 ```
 
 #### Long values
