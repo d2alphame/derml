@@ -80,6 +80,19 @@ If the value is a multi-line value, use the pipe (`|`) and follow with a delimit
 Do not forget the whitespace around `|`. All initial whitespace is removed. This implies that you end up with a left-aligned
 paragraph.
 
+#### "Pythonic" values
+Relative indentation of the values may be preserved. This is done by using `>` to assign the value and specifying a delimiter. End
+the value with the delimiter on a line by itself possibly surrounded by spaces. The initial spaces on each line is stripped. The
+number of indenting spaces on the first line of the value is stripped off from the remaining lines. This means python or yaml can
+be stored. For example
+```
+	my-python-code > end-of-python
+		if(x > 5):
+			print("x is 5")
+	end-of-python
+```
+The delimiter begins with the first non-whitespace character after the `>` up to the end of that line.
+
 ### Keys
 The keys can be any combination of uppercase letters (A-Z), lowercase letters (a-z), numbers (0-9), dash, and underscore.
 Keys cannot start with a dash or a number. This means the regex for keys would be
@@ -146,19 +159,19 @@ Quoting mechanisms may be used, however. To do that, replace the equals `=` sign
 #### Quoting Array Elements with Brackets
 The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
 ```
-	parens-as-quotes[] : (first item) (this is the second) (and this is the third)
-	square-brackets-as-quotes[] : [element number 1] [element number 2] [element number 3]
-	use-braces[] : {this is the first} {this is the second} {this is the third}
-	angular-brackets[] : <Aang> <Katara> <Sokka> <Toph> <Zuko>
+	parens-as-quotes[] = (first item) (this is the second) (and this is the third)
+	square-brackets-as-quotes[] = [element number 1] [element number 2] [element number 3]
+	use-braces[] = {this is the first} {this is the second} {this is the third}
+	angular-brackets[] = <Aang> <Katara> <Sokka> <Toph> <Zuko>
 ```
 Note in the above examples that the equals sign has been replaced with a colon.
 
 #### Quoting Array Elements with Quotes.
 When using any of backtick(\`), apostrophe('), and double-quotes("), each array element must be surrounded by the quoting character _**and**_ seperated by comma-space. For example:
 ```
-	use-backtick-as-separator[] : `first`, `second`, `third`
-	use-apostrophe-as-separator[] : 'first', 'second', 'third'
-	use-double-quotes-separator[] : "first", "second", "third"
+	use-backtick-as-separator[] = `first`, `second`, `third`
+	use-apostrophe-as-separator[] = 'first', 'second', 'third'
+	use-double-quotes-separator[] = "first", "second", "third"
 ```
 
 #### Separating array elements with spaces
