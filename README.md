@@ -154,7 +154,6 @@ Here are some other examples
 	even-numbers[] = 2, 4, 6, 8, 10, 12
 	the-gaang[] = Aang, Katara, Sokka, Toph, Zuko
 ```
-Quoting mechanisms may be used, however. To do that, replace the equals `=` sign with a colon `:` and surround each element with the desired quote.
 
 #### Quoting Array Elements with Brackets
 The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
