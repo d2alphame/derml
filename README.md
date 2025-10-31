@@ -13,7 +13,7 @@ In their most basic forms, key-value pairs are represented thus:
 ```
 	key = value
 ```
-Keys may be any combination of alphabets, numbers, dashes or underscores and may not begin with a number or a dash.
+Keys may be any combination of alphabets, numbers, dashes, underscores, or the period character and may not begin with a number or a dash.
 
 Note the whitespace around the equals (=) sign. They are compulsory and **must** be added.
 Also note that keys are case-sensitive. So `mykey` is different from `Mykey` which is different from `MyKey`, etc.
@@ -154,7 +154,6 @@ Here are some other examples
 	even-numbers[] = 2, 4, 6, 8, 10, 12
 	the-gaang[] = Aang, Katara, Sokka, Toph, Zuko
 ```
-Quoting mechanisms may be used, however. To do that, replace the equals `=` sign with a colon `:` and surround each element with the desired quote.
 
 #### Quoting Array Elements with Brackets
 The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
