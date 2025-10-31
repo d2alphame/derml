@@ -163,7 +163,6 @@ The four brackets '()', '[]', '{}', '<>' can be used to quote array elements
 	use-braces[] = {this is the first} {this is the second} {this is the third}
 	angular-brackets[] = <Aang> <Katara> <Sokka> <Toph> <Zuko>
 ```
-Note in the above examples that the equals sign has been replaced with a colon.
 
 #### Quoting Array Elements with Quotes.
 When using any of backtick(\`), apostrophe('), and double-quotes("), each array element must be surrounded by the quoting character _**and**_ seperated by comma-space. For example:
